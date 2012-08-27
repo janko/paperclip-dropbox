@@ -16,5 +16,4 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency "dropbox-sdk", "~> 1.3"
-  gem.add_dependency "paperclip"
 end

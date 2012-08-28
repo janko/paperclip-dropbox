@@ -1,42 +1,46 @@
 require 'dropbox_sdk'
 require 'active_support/core_ext/hash/keys'
-require "yaml"
-require "erb"
+require 'active_support/inflector/methods'
+require 'yaml'
+require 'erb'
 
 module Paperclip
   module Storage
     module Dropbox
       attr_reader :dropbox_client
 
-      DEFAULTS = {
-        unique_identifier: :id,
-        unique_filename: false
-      }
-
       def self.extended(base)
         base.instance_eval do
-          @options[:dropbox_credentials] = parse_credentials(@options[:dropbox_credentials])
+          @dropbox_settings = parse_settings(@options[:dropbox_settings] || {})
+          @dropbox_settings.update(@options[:dropbox_options] || {})
 
-          app_key, app_secret = @options[:dropbox_credentials].slice(:app_key, :app_secret).values
-          access_token = @options[:dropbox_credentials].slice(:access_token, :access_token_secret).values
-          session = DropboxSession.new(app_key, app_secret)
-          session.set_access_token(*access_token)
+          session = DropboxSession.new(@dropbox_settings[:app_key], @dropbox_settings[:app_secret])
+          session.set_access_token(@dropbox_settings[:access_token], @dropbox_settings[:access_token_secret])
 
-          access_type = @options[:dropbox_credentials][:access_type] || :app_folder
-          @dropbox_client = DropboxClient.new(session, access_type)
+          @dropbox_client = DropboxClient.new(session, @dropbox_settings[:access_type] || :app_folder)
 
-          @options[:dropbox_options] = DEFAULTS.merge(options[:dropbox_options] || {})
+          @dropbox_keywords = Hash.new do |hash, key|
+            if key =~ /^\<record_.+\>$/
+              attribute = key.match(/^\<record_(.+)\>$/)[1]
+              hash[key] = lambda { |style| instance.send(attribute) }
+            end
+          end
+          @dropbox_keywords.update(
+            "<model_name>"      => lambda { |style| instance.class.table_name.singularize },
+            "<table_name>"      => lambda { |style| instance.class.table_name },
+            "<filename>"        => lambda { |style| original_filename.match(/\.\w{3,4}$/).pre_match },
+            "<attachment_name>" => lambda { |style| name },
+            "<style>"           => lambda { |style| style }
+          )
         end
       end
 
       def flush_writes
         @queued_for_write.each do |style, file|
-          filename = filename_for(instance_read(:file_name), style)
-          if unique_filename? or !exists?(style)
-            response = dropbox_client.put_file(filename, file.read)
-            instance_write(:file_name, File.basename(response["path"])) if style == default_style
+          unless exists?(style)
+            response = dropbox_client.put_file(path(style), file.read)
           else
-            raise FileExists, "\"#{filename}\" already exists on Dropbox"
+            raise FileExists, "\"#{path(style)}\" already exists on Dropbox"
           end
         end
 
@@ -45,8 +49,8 @@ module Paperclip
       end
 
       def flush_deletes
-        @queued_for_delete.each do |filename|
-          dropbox_client.file_delete(filename)
+        @queued_for_delete.each do |path|
+          dropbox_client.file_delete(path)
         end
         @queued_for_delete = []
       end
@@ -67,7 +71,13 @@ module Paperclip
       end
 
       def path(style)
-        filename_for(original_filename, style)
+        extension = original_filename[/\.\w{3,4}$/]
+        result = file_path
+        file_path.scan(/\<\w+\>/).each do |keyword|
+          result.sub!(keyword, @dropbox_keywords[keyword].call(style).to_s)
+        end
+        style_suffix = style != default_style ? "_#{style}" : ""
+        result = "#{result}#{style_suffix}#{extension}"
       end
 
       def copy_to_local_file(style, destination_path)
@@ -78,52 +88,34 @@ module Paperclip
 
       private
 
-      def filename_for(filename, style = default_style)
-        match = filename.match(/\.\w{3,4}$/)
-        extension = match[0]
-        before_extension =
-          unless unique_filename?
-            match.pre_match
-          else
-            "#{unique_identifier}_#{name}"
-          end
-        style_suffix = style != default_style ? "_#{style}" : ""
+      def file_path
+        return @dropbox_settings[:path] if @dropbox_settings[:path]
 
-        result_filename = "#{before_extension}#{style_suffix}#{extension}"
-
-        if @options[:dropbox_folder]
-          File.join(@options[:dropbox_folder], result_filename)
+        if @dropbox_settings[:unique_filename]
+          "<model_name>_<record_id>_<attachment_name>"
         else
-          result_filename
+          "<filename>"
         end
       end
 
-      def parse_credentials(credentials)
-        credentials = credentials.respond_to?(:call) ? credentials.call : credentials
-        credentials = get_credentials(credentials).stringify_keys
-        environment = defined?(Rails) ? Rails.env : @options[:environment].to_s
-        (credentials[environment] || credentials).symbolize_keys
+      def parse_settings(settings)
+        settings = settings.respond_to?(:call) ? settings.call : settings
+        settings = get_settings(settings).stringify_keys
+        environment = defined?(Rails) ? Rails.env : @dropbox_settings[:environment].to_s
+        (settings[environment] || settings).symbolize_keys
       end
 
-      def get_credentials(credentials)
-        case credentials
+      def get_settings(settings)
+        case settings
         when File
-          YAML.load(ERB.new(File.read(credentials.path)).result)
+          YAML.load(ERB.new(File.read(settings.path)).result)
         when String, Pathname
-          YAML.load(ERB.new(File.read(credentials)).result)
+          YAML.load(ERB.new(File.read(settings)).result)
         when Hash
-          credentials
+          settings
         else
-          raise ArgumentError, "Credentials are not a path, file, or hash."
+          raise ArgumentError, "settings are not a path, file, or hash."
         end
-      end
-
-      def unique_filename?
-        @options[:dropbox_options][:unique_filename]
-      end
-
-      def unique_identifier
-        instance.send(@options[:dropbox_options][:unique_identifier])
       end
 
       class FileExists < RuntimeError

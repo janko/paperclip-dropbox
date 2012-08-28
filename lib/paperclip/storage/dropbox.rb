@@ -64,7 +64,7 @@ module Paperclip
         options = args.last.is_a?(Hash) ? args.last : {}
         query = options[:download] ? "?dl=1" : ""
 
-        dropbox_client.media(path(style))["url"] + query
+        dropbox_client.media(path(style).to_s)["url"] + query
 
       rescue DropboxError
         nil
@@ -78,6 +78,9 @@ module Paperclip
         end
         style_suffix = style != default_style ? "_#{style}" : ""
         result = "#{result}#{style_suffix}#{extension}"
+
+      rescue
+        nil
       end
 
       def copy_to_local_file(style, destination_path)

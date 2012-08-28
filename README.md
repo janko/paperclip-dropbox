@@ -50,8 +50,8 @@ You can also namespace them inside of `development`, `testing` and `production` 
 There are 3 more **optional** configurations:
 
 - `:access_type` – This is either `"app_folder"` or `"dropbox"` (defaults to `"app_folder"`)
-- `:path` - Similar to Paperclip's `:path` option (defaults to `"<filename>"`)
-- `:environment` - Here you can set your environment if you're in a non-Rails application
+- `:path` – Similar to Paperclip's `:path` option (defaults to `"<filename>"`)
+- `:environment` – Here you can set your environment if you're in a non-Rails application
 
 ### The `:path` option
 
@@ -63,8 +63,8 @@ users/13_avatar_photo.jpg
 ```
 
 The keywords are: `<filename>`, `<table_name>`, `<model_name>`,
-`<attachment_name>` and `<style>`. Additionally, if you want to use record's attributes, just
-prefix them with `record_` (like the `<record_id>` above).
+`<attachment_name>` and `<style>`. Additionally, if you want to use any of the record's attributes,
+just prefix them with `record_` (like the `<record_id>` above).
 
 Files in Dropbox inside a certain folder have to have unique filenames, otherwise exception
 `Paperclip::Storage::Dropbox::FileExists` is thrown. To help you with that, you

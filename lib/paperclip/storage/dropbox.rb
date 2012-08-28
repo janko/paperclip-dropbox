@@ -6,9 +6,18 @@ require "erb"
 module Paperclip
   module Storage
     module Dropbox
+      class FileExists < RuntimeError
+      end
+
+      DEFAULTS = {
+        unique_identifier: :id,
+        unique_filename: false
+      }
+
       def self.extended(base)
         base.instance_eval do
           @options[:dropbox_credentials] = parse_credentials(@options[:dropbox_credentials])
+          @options[:dropbox_options] = DEFAULTS.merge(options[:dropbox_options] || {})
         end
       end
 
@@ -16,7 +25,6 @@ module Paperclip
         @dropbox_session ||= begin
           app_key, app_secret = @options[:dropbox_credentials].slice(:app_key, :app_secret).values
           access_token = @options[:dropbox_credentials].slice(:access_token, :access_token_secret).values
-
           DropboxSession.new(app_key, app_secret).tap do |session|
             session.set_access_token(*access_token)
           end
@@ -24,15 +32,24 @@ module Paperclip
       end
 
       def dropbox_client
-        access_type = @options[:dropbox_credentials][:access_type] || :app_folder
-        @dropbox_client ||= DropboxClient.new(dropbox_session, access_type)
+        @dropbox_client ||= begin
+          access_type = @options[:dropbox_credentials][:access_type] || :app_folder
+          DropboxClient.new(dropbox_session, access_type)
+        end
       end
 
       def flush_writes
         @queued_for_write.each do |style, file|
-          filename = filename_for(file.original_filename, style)
-          dropbox_client.put_file(filename, file.read)
+          filename = filename_for(instance_read(:file_name), style)
+          if unique_filename? or !exists?(style)
+            response = dropbox_client.put_file(filename, file.read)
+            instance_write(:file_name, File.basename(response["path"])) if style == default_style
+          else
+            raise FileExists, "\"#{filename}\" already exists on Dropbox"
+          end
         end
+
+        after_flush_writes
         @queued_for_write = {}
       end
 
@@ -44,12 +61,18 @@ module Paperclip
       end
 
       def exists?(style)
-        dropbox_client.search("", path(style)).any?
+        !!url(style)
       end
 
-      def url(style, options = {})
+      def url(*args)
+        style = args.first.is_a?(Symbol) ? args.first : default_style
+        options = args.last.is_a?(Hash) ? args.last : {}
         query = options[:download] ? "?dl=1" : ""
+
         dropbox_client.media(path(style))["url"] + query
+
+      rescue DropboxError
+        nil
       end
 
       def path(style)
@@ -58,11 +81,23 @@ module Paperclip
 
       private
 
-      def filename_for(filename, style)
-        if style != :original
-          filename.sub(/(?=\.\w{3,4}$)/, "_#{style}")
+      def filename_for(filename, style = default_style)
+        match = filename.match(/\.\w{3,4}$/)
+        extension = match[0]
+        before_extension =
+          unless unique_filename?
+            match.pre_match
+          else
+            "#{unique_identifier}_#{name}"
+          end
+        style_suffix = style != default_style ? "_#{style}" : ""
+
+        result_filename = "#{before_extension}#{style_suffix}#{extension}"
+
+        if @options[:dropbox_folder]
+          File.join(@options[:dropbox_folder], result_filename)
         else
-          filename
+          result_filename
         end
       end
 
@@ -84,6 +119,14 @@ module Paperclip
         else
           raise ArgumentError, "Credentials are not a path, file, or hash."
         end
+      end
+
+      def unique_filename?
+        @options[:dropbox_options][:unique_filename]
+      end
+
+      def unique_identifier
+        instance.send(@options[:dropbox_options][:unique_identifier])
       end
     end
   end

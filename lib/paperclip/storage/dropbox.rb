@@ -6,8 +6,7 @@ require "erb"
 module Paperclip
   module Storage
     module Dropbox
-      class FileExists < RuntimeError
-      end
+      attr_reader :dropbox_client
 
       DEFAULTS = {
         unique_identifier: :id,
@@ -17,24 +16,16 @@ module Paperclip
       def self.extended(base)
         base.instance_eval do
           @options[:dropbox_credentials] = parse_credentials(@options[:dropbox_credentials])
-          @options[:dropbox_options] = DEFAULTS.merge(options[:dropbox_options] || {})
-        end
-      end
 
-      def dropbox_session
-        @dropbox_session ||= begin
           app_key, app_secret = @options[:dropbox_credentials].slice(:app_key, :app_secret).values
           access_token = @options[:dropbox_credentials].slice(:access_token, :access_token_secret).values
-          DropboxSession.new(app_key, app_secret).tap do |session|
-            session.set_access_token(*access_token)
-          end
-        end
-      end
+          session = DropboxSession.new(app_key, app_secret)
+          session.set_access_token(*access_token)
 
-      def dropbox_client
-        @dropbox_client ||= begin
           access_type = @options[:dropbox_credentials][:access_type] || :app_folder
-          DropboxClient.new(dropbox_session, access_type)
+          @dropbox_client = DropboxClient.new(session, access_type)
+
+          @options[:dropbox_options] = DEFAULTS.merge(options[:dropbox_options] || {})
         end
       end
 
@@ -79,6 +70,12 @@ module Paperclip
         filename_for(original_filename, style)
       end
 
+      def copy_to_local_file(style, destination_path)
+        local_file = File.open(destination_path, "wb")
+        local_file.write(dropbox_client.get_file(path(style)))
+        local_file.close
+      end
+
       private
 
       def filename_for(filename, style = default_style)
@@ -104,7 +101,7 @@ module Paperclip
       def parse_credentials(credentials)
         credentials = credentials.respond_to?(:call) ? credentials.call : credentials
         credentials = get_credentials(credentials).stringify_keys
-        environment = Object.const_defined?(:Rails) ? Rails.env : @options[:environment].to_s
+        environment = defined?(Rails) ? Rails.env : @options[:environment].to_s
         (credentials[environment] || credentials).symbolize_keys
       end
 
@@ -127,6 +124,9 @@ module Paperclip
 
       def unique_identifier
         instance.send(@options[:dropbox_options][:unique_identifier])
+      end
+
+      class FileExists < RuntimeError
       end
     end
   end

@@ -38,7 +38,8 @@ module Paperclip
       def flush_writes
         @queued_for_write.each do |style, file|
           unless exists?(style)
-            response = dropbox_client.put_file(path(style), file.read)
+            dropbox_client.put_file(path(style), file.read)
+            instance_write(:url, dropbox_client.media(path(style))["url"])
           else
             raise FileExists, "\"#{path(style)}\" already exists on Dropbox"
           end
@@ -61,10 +62,12 @@ module Paperclip
 
       def url(*args)
         style = args.first.is_a?(Symbol) ? args.first : default_style
+        style_suffix = (style != default_style ? "_#{style}" : "")
+
         options = args.last.is_a?(Hash) ? args.last : {}
         query = options[:download] ? "?dl=1" : ""
 
-        dropbox_client.media(path(style).to_s)["url"] + query
+        instance_read(:url).sub(/(?=\.\w{3,4}$)/, style_suffix) + query
 
       rescue DropboxError
         nil
@@ -76,7 +79,7 @@ module Paperclip
         file_path.scan(/\<\w+\>/).each do |keyword|
           result.sub!(keyword, @dropbox_keywords[keyword].call(style).to_s)
         end
-        style_suffix = style != default_style ? "_#{style}" : ""
+        style_suffix = (style != default_style ? "_#{style}" : "")
         result = "#{result}#{style_suffix}#{extension}"
 
       rescue

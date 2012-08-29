@@ -7,31 +7,11 @@ require 'erb'
 module Paperclip
   module Storage
     module Dropbox
-      attr_reader :dropbox_client
-
       def self.extended(base)
         base.instance_eval do
           @dropbox_settings = parse_settings(@options[:dropbox_settings] || {})
           @dropbox_settings.update(@options[:dropbox_options] || {})
 
-          session = DropboxSession.new(@dropbox_settings[:app_key], @dropbox_settings[:app_secret])
-          session.set_access_token(@dropbox_settings[:access_token], @dropbox_settings[:access_token_secret])
-
-          @dropbox_client = DropboxClient.new(session, @dropbox_settings[:access_type] || :app_folder)
-
-          @dropbox_keywords = Hash.new do |hash, key|
-            if key =~ /^\<record_.+\>$/
-              attribute = key.match(/^\<record_(.+)\>$/)[1]
-              hash[key] = lambda { |style| instance.send(attribute) }
-            end
-          end
-          @dropbox_keywords.update(
-            "<model_name>"      => lambda { |style| instance.class.table_name.singularize },
-            "<table_name>"      => lambda { |style| instance.class.table_name },
-            "<filename>"        => lambda { |style| original_filename.match(/\.\w{3,4}$/).pre_match },
-            "<attachment_name>" => lambda { |style| name },
-            "<style>"           => lambda { |style| style }
-          )
         end
       end
 
@@ -77,7 +57,7 @@ module Paperclip
         extension = original_filename[/\.\w{3,4}$/]
         result = file_path
         file_path.scan(/\<\w+\>/).each do |keyword|
-          result.sub!(keyword, @dropbox_keywords[keyword].call(style).to_s)
+          result.sub!(keyword, dropbox_keywords[keyword].call(style).to_s)
         end
         style_suffix = (style != default_style ? "_#{style}" : "")
         result = "#{result}#{style_suffix}#{extension}"
@@ -121,6 +101,32 @@ module Paperclip
           settings
         else
           raise ArgumentError, "settings are not a path, file, or hash."
+        end
+      end
+
+      def dropbox_client
+        @dropbox_client ||= begin
+          session = DropboxSession.new(@dropbox_settings[:app_key], @dropbox_settings[:app_secret])
+          session.set_access_token(@dropbox_settings[:access_token], @dropbox_settings[:access_token_secret])
+          DropboxClient.new(session, @dropbox_settings[:access_type] || :app_folder)
+        end
+      end
+
+      def dropbox_keywords
+        @dropbox_keywords ||= begin
+          hash = Hash.new do |hash, key|
+            if key =~ /^\<record_.+\>$/
+              attribute = key.match(/^\<record_(.+)\>$/)[1]
+              hash[key] = lambda { |style| instance.send(attribute) }
+            end
+          end
+          hash.update(
+            "<model_name>"      => lambda { |style| instance.class.table_name.singularize },
+            "<table_name>"      => lambda { |style| instance.class.table_name },
+            "<filename>"        => lambda { |style| original_filename.match(/\.\w{3,4}$/).pre_match },
+            "<attachment_name>" => lambda { |style| name },
+            "<style>"           => lambda { |style| style }
+          )
         end
       end
 

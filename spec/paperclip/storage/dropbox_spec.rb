@@ -1,5 +1,5 @@
 require "spec_helper"
-require 'paperclip/storage/dropbox'
+require 'paperclip-dropbox'
 require 'active_record'
 require 'fileutils'
 require 'rack/test'
@@ -51,34 +51,37 @@ describe Paperclip::Storage::Dropbox, :vcr do
       it "complains when not properly set" do
         User.add_dropbox_avatar(dropbox_credentials: 1)
         expect { User.new.avatar }.to raise_error(ArgumentError)
+
+        User.add_dropbox_avatar(dropbox_credentials: {})
+        expect { User.new.avatar }.to raise_error(KeyError)
       end
 
       it "accepts a path to file" do
         path = "#{RSPEC_DIR}/dropbox.yml"
         User.add_dropbox_avatar(dropbox_credentials: path)
-        User.new.avatar.should be_authenticated
+        expect { User.new.avatar }.to_not raise_error(KeyError)
       end
 
       it "accepts an open file" do
         file = File.open("#{RSPEC_DIR}/dropbox.yml")
         User.add_dropbox_avatar(dropbox_credentials: file)
-        User.new.avatar.should be_authenticated
+        expect { User.new.avatar }.to_not raise_error(KeyError)
       end
 
       it "accepts a hash" do
         hash = YAML.load(ERB.new(File.read("#{RSPEC_DIR}/dropbox.yml")).result)
         User.add_dropbox_avatar(dropbox_credentials: hash)
-        User.new.avatar.should be_authenticated
+        expect { User.new.avatar }.to_not raise_error(KeyError)
       end
 
       it "recognizes environments" do
         hash = YAML.load(ERB.new(File.read("#{RSPEC_DIR}/dropbox.yml")).result)
 
         User.add_dropbox_avatar(dropbox_credentials: {development: hash}, dropbox_options: {environment: "development"})
-        User.new.avatar.should be_authenticated
+        expect { User.new.avatar }.to_not raise_error(KeyError)
 
         User.add_dropbox_avatar(dropbox_credentials: {development: hash}, dropbox_options: {environment: "production"})
-        User.new.avatar.should_not be_authenticated
+        expect { User.new.avatar }.to raise_error(KeyError)
       end
 
       after(:each) do
@@ -143,7 +146,9 @@ describe Paperclip::Storage::Dropbox, :vcr do
           dropbox_credentials: "#{RSPEC_DIR}/dropbox.yml",
           styles: {medium: "300x300"}
       end
+    end
 
+    before(:each) do
       @user = User.create(avatar: file("photo.jpg"))
     end
 
@@ -165,8 +170,11 @@ describe Paperclip::Storage::Dropbox, :vcr do
       response.code.to_i.should == 200
     end
 
-    after(:all) do
+    after(:each) do
       User.destroy_all
+    end
+
+    after(:all) do
       Object.send(:remove_const, :User)
     end
   end

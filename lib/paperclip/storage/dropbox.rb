@@ -1,5 +1,6 @@
 require 'dropbox_sdk'
 require 'active_support/core_ext/hash/keys'
+require 'active_support/core_ext/hash/slice'
 require 'active_support/inflector/methods'
 require 'yaml'
 require 'erb'
@@ -13,6 +14,7 @@ module Paperclip
           @dropbox_options = @options[:dropbox_options] || {}
           environment = defined?(Rails) ? Rails.env : @dropbox_options[:environment].to_s
           @dropbox_credentials = (@dropbox_credentials[environment] || @dropbox_credentials).symbolize_keys
+          dropbox_client # Force validations of credentials
         end
       end
 
@@ -88,9 +90,16 @@ module Paperclip
 
       def dropbox_client
         @dropbox_client ||= begin
+          assert_required_keys
           session = DropboxSession.new(@dropbox_credentials[:app_key], @dropbox_credentials[:app_secret])
           session.set_access_token(@dropbox_credentials[:access_token], @dropbox_credentials[:access_token_secret])
           DropboxClient.new(session, "dropbox")
+        end
+      end
+
+      def assert_required_keys
+        [:app_key, :app_secret, :access_token, :access_token_secret, :user_id].each do |key|
+          @dropbox_credentials.fetch(key)
         end
       end
 

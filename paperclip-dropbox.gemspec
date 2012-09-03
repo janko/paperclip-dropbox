@@ -15,5 +15,14 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
 
+  gem.add_dependency "paperclip", "~> 3.1"
   gem.add_dependency "dropbox-sdk", "~> 1.3"
+
+  gem.add_development_dependency "rake", "~> 0.9"
+  gem.add_development_dependency "rspec", "~> 2.11"
+  gem.add_development_dependency "vcr", "~> 2.2"
+  gem.add_development_dependency "fakeweb", "~> 1.3"
+  gem.add_development_dependency "activerecord", "~> 3.2"
+  gem.add_development_dependency "rack-test", "~> 0.6"
+  gem.add_development_dependency "sqlite3", "~> 1.3"
 end

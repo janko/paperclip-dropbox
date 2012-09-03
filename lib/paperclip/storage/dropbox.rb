@@ -9,9 +9,10 @@ module Paperclip
     module Dropbox
       def self.extended(base)
         base.instance_eval do
-          @dropbox_settings = parse_settings(@options[:dropbox_settings] || {})
-          @dropbox_settings.update(@options[:dropbox_options] || {})
-
+          @dropbox_credentials = parse_credentials(@options[:dropbox_credentials] || {})
+          @dropbox_options = @options[:dropbox_options] || {}
+          environment = defined?(Rails) ? Rails.env : @dropbox_options[:environment].to_s
+          @dropbox_credentials = (@dropbox_credentials[environment] || @dropbox_credentials).symbolize_keys
         end
       end
 
@@ -19,12 +20,10 @@ module Paperclip
         @queued_for_write.each do |style, file|
           unless exists?(style)
             dropbox_client.put_file(path(style), file.read)
-            instance_write(:url, dropbox_client.media(path(style))["url"])
           else
-            raise FileExists, "\"#{path(style)}\" already exists on Dropbox"
+            raise FileExists, "file \"#{path(style)}\" already exists on Dropbox"
           end
         end
-
         after_flush_writes
         @queued_for_write = {}
       end
@@ -37,33 +36,28 @@ module Paperclip
       end
 
       def exists?(style)
-        !!url(style)
+        !!dropbox_client.media(path(style))
+      rescue DropboxError
+        false
       end
 
       def url(*args)
         style = args.first.is_a?(Symbol) ? args.first : default_style
-        style_suffix = (style != default_style ? "_#{style}" : "")
-
         options = args.last.is_a?(Hash) ? args.last : {}
         query = options[:download] ? "?dl=1" : ""
 
-        instance_read(:url).sub(/(?=\.\w{3,4}$)/, style_suffix) + query
-
-      rescue DropboxError
-        nil
+        File.join("http://dl.dropbox.com/u/#{user_id}", path_for_url(style) + query)
       end
 
       def path(style)
-        extension = original_filename[/\.\w{3,4}$/]
-        result = file_path
-        file_path.scan(/\<\w+\>/).each do |keyword|
-          result.sub!(keyword, dropbox_keywords[keyword].call(style).to_s)
-        end
-        style_suffix = (style != default_style ? "_#{style}" : "")
-        result = "#{result}#{style_suffix}#{extension}"
+        File.join("Public", path_for_url(style))
+      end
 
-      rescue
-        nil
+      def path_for_url(style)
+        result = instance.instance_exec(style, &file_path)
+        result += extension if result !~ /\.\w{3,4}$/
+        style_suffix = (style != default_style ? "_#{style}" : "")
+        result.sub(extension, "#{style_suffix}#{extension}")
       end
 
       def copy_to_local_file(style, destination_path)
@@ -74,63 +68,49 @@ module Paperclip
 
       private
 
+      def extension
+        original_filename[/\.\w{3,4}$/]
+      end
+
+      def user_id
+        @dropbox_credentials[:user_id]
+      end
+
       def file_path
-        return @dropbox_settings[:path] if @dropbox_settings[:path]
+        return @dropbox_options[:path] if @dropbox_options[:path]
 
-        if @dropbox_settings[:unique_filename]
-          "<model_name>_<record_id>_<attachment_name>"
+        if @dropbox_options[:unique_filename]
+          eval %(proc { |style| "\#{self.class.model_name.underscore}_\#{id}_\#{#{name}.name}" })
         else
-          "<filename>"
-        end
-      end
-
-      def parse_settings(settings)
-        settings = settings.respond_to?(:call) ? settings.call : settings
-        settings = get_settings(settings).stringify_keys
-        environment = defined?(Rails) ? Rails.env : @dropbox_settings[:environment].to_s
-        (settings[environment] || settings).symbolize_keys
-      end
-
-      def get_settings(settings)
-        case settings
-        when File
-          YAML.load(ERB.new(File.read(settings.path)).result)
-        when String, Pathname
-          YAML.load(ERB.new(File.read(settings)).result)
-        when Hash
-          settings
-        else
-          raise ArgumentError, "settings are not a path, file, or hash."
+          eval %(proc { |style| #{name}.original_filename })
         end
       end
 
       def dropbox_client
         @dropbox_client ||= begin
-          session = DropboxSession.new(@dropbox_settings[:app_key], @dropbox_settings[:app_secret])
-          session.set_access_token(@dropbox_settings[:access_token], @dropbox_settings[:access_token_secret])
-          DropboxClient.new(session, @dropbox_settings[:access_type] || :app_folder)
+          session = DropboxSession.new(@dropbox_credentials[:app_key], @dropbox_credentials[:app_secret])
+          session.set_access_token(@dropbox_credentials[:access_token], @dropbox_credentials[:access_token_secret])
+          DropboxClient.new(session, "dropbox")
         end
       end
 
-      def dropbox_keywords
-        @dropbox_keywords ||= begin
-          hash = Hash.new do |hash, key|
-            if key =~ /^\<record_.+\>$/
-              attribute = key.match(/^\<record_(.+)\>$/)[1]
-              hash[key] = lambda { |style| instance.send(attribute) }
-            end
+      def parse_credentials(credentials)
+        result =
+          case credentials
+          when File
+            YAML.load(ERB.new(File.read(credentials.path)).result)
+          when String, Pathname
+            YAML.load(ERB.new(File.read(credentials)).result)
+          when Hash
+            credentials
+          else
+            raise ArgumentError, ":dropbox_credentials are not a path, file, nor a hash"
           end
-          hash.update(
-            "<model_name>"      => lambda { |style| instance.class.table_name.singularize },
-            "<table_name>"      => lambda { |style| instance.class.table_name },
-            "<filename>"        => lambda { |style| original_filename.match(/\.\w{3,4}$/).pre_match },
-            "<attachment_name>" => lambda { |style| name },
-            "<style>"           => lambda { |style| style }
-          )
-        end
+
+        result.stringify_keys
       end
 
-      class FileExists < RuntimeError
+      class FileExists < ArgumentError
       end
     end
   end

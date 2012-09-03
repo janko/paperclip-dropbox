@@ -120,6 +120,15 @@ It will provide you an authorization URL which you have to visit, and after that
 it will output the rest of your credentials, which you just copy-paste wherever
 you need to.
 
+If you're in a non-Rails application, to get this task, you must require it in
+your `Rakefile`:
+
+```ruby
+# Rakefile
+require "rake"
+require "paperclip/dropbox/rake"
+```
+
 ## License
 
 [MIT](https://github.com/janko-m/paperclip-dropbox/blob/master/LICENSE)

@@ -49,7 +49,7 @@ user_id: <%= ENV["DROPBOX_USER_ID"] %>
 ```
 
 This is a good practice; Don't put your credentials directly in your YAML file.
-Instead set them in system environment variables, and then embedded them here through ERB.
+Instead set them in system environment variables, and then embed them here through ERB.
 
 Note that all credentials mentioned here are required.
 
@@ -108,7 +108,7 @@ Files in Dropbox inside a certain folder have to have **unique filenames**, othe
 can pass in `:unique_filename => true` to `:dropbox_options`, and that will set
 `:path` to something that will be unique.
 
-When calling `#url` on your attachment, you can pass in
+You can also pass in the `:download` option to attachment's `#url`:
 
 ```ruby
 user.avatar.url(:download => true)

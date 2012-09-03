@@ -48,8 +48,8 @@ access_token_secret: <%= ENV["DROPBOX_ACCESS_TOKEN_SECRET"] %>
 user_id: <%= ENV["DROPBOX_USER_ID"] %>
 ```
 
-This is a good practice; I didn't put my credentials directly in the YAML file, but I first
-set them in my system's environment variables, and then embedded them here through ERB.
+This is a good practice; Don't put your credentials directly in your YAML file.
+Instead set them in system environment variables, and then embedded them here through ERB.
 
 Note that all credentials mentioned here are required.
 
@@ -77,7 +77,7 @@ You can pass it 3 options:
 - `:unique_filename` – Boolean
 
 The `:path` option works in this way; you give it a block, and the return value
-will be the path that the uploaded file will be saved to. The block yields the style (if any),
+will be the path that the uploaded file will be saved to. The block yields attachment style,
 and is executed in the scope of the class' instance. For example, let's say you have
 
 ```ruby
@@ -85,15 +85,15 @@ class User < ActiveRecord::Base
   has_attached_file :avatar,
     :storage => :dropbox,
     :dropbox_credentials => "...",
+    :styles => { :medium => "300x300" },
     :dropbox_options => {
       :path => proc { |style| "#{style}/#{id}_#{avatar.original_filename}"}
-    },
-    :styles => { :medium => "300x300" }
+    }
 end
 ```
 
-Let's say now that a user is saved in the database, with a `photo.jpg` as his
-avatar. The path where that files were saved could look something like this:
+Let's say now that a new user is created with the ID of `23`, and a `photo.jpg` as his
+avatar. The following files would be saved to the Dropbox:
 
 ```
 Public/original/23_photo.jpg
@@ -101,12 +101,21 @@ Public/medium/23_photo_medium.jpg
 ```
 
 The other file is called `photo_medium.jpg` because style names (other than `original`)
-will always be appended to the filenames.
+are always be appended to the filenames.
 
 Files in Dropbox inside a certain folder have to have **unique filenames**, otherwise exception
 `Paperclip::Storage::Dropbox::FileExists` is thrown. To help you with that, you
 can pass in `:unique_filename => true` to `:dropbox_options`, and that will set
 `:path` to something that will be unique.
+
+When calling `#url` on your attachment, you can pass in
+
+```ruby
+user.avatar.url(:download => true)
+```
+
+And that will return a download URL for that attachment (so, if a user clicks to
+that link, the file will be downloaded, as opposed to being opened in the browser).
 
 ### The `dropbox:authorize` rake task
 
@@ -120,7 +129,7 @@ It will provide you an authorization URL which you have to visit, and after that
 it will output the rest of your credentials, which you just copy-paste wherever
 you need to.
 
-If you're in a non-Rails application, to get this task, you must require it in
+If you're in a non-Rails application, to get this rake task, you must require it in
 your `Rakefile`:
 
 ```ruby

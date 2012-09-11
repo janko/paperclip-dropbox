@@ -101,7 +101,7 @@ Public/medium/23_photo_medium.jpg
 ```
 
 The other file is called `photo_medium.jpg` because style names (other than `original`)
-are always be appended to the filenames.
+will always be appended to the filenames, for better management.
 
 Files in Dropbox inside a certain folder have to have **unique filenames**, otherwise exception
 `Paperclip::Storage::Dropbox::FileExists` is thrown. To help you with that, you

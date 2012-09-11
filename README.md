@@ -105,8 +105,16 @@ will always be appended to the filenames, for better management.
 
 Files in Dropbox inside a certain folder have to have **unique filenames**, otherwise exception
 `Paperclip::Storage::Dropbox::FileExists` is thrown. To help you with that, you
-can pass in `:unique_filename => true` to `:dropbox_options`, and that will set
-`:path` to something that will be unique.
+can set
+
+```ruby
+# ...
+    :dropbox_options => {
+      :unique_filename => true
+    }
+```
+
+That will set `:path` to something that will be unique.
 
 You can also pass in the `:download` option to attachment's `#url`:
 

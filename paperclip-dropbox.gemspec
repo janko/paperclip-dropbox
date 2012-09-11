@@ -11,7 +11,7 @@ Gem::Specification.new do |gem|
   gem.authors       = ["Janko Marohnić"]
   gem.email         = ["janko.marohnic@gmail.com"]
 
-  gem.files         = Dir["lib/**/*"] + ["README.md", "paperclip-dropbox.gemspec"]
+  gem.files         = Dir["lib/**/*"] + ["README.md", "LICENSE", "paperclip-dropbox.gemspec"]
   gem.require_path  = "lib"
 
   gem.required_ruby_version = ">= 1.9.2"

@@ -5,22 +5,22 @@ require 'fileutils'
 require 'rack/test'
 require 'net/http'
 
+class CreateUsers < ActiveRecord::Migration
+  self.verbose = false
+
+  def change
+    create_table :users do |t|
+      t.attachment :avatar
+    end
+  end
+end
+
 describe Paperclip::Storage::Dropbox, :vcr do
   before(:all) do
     ActiveRecord::Base.send(:include, Paperclip::Glue)
 
     FileUtils.mkdir_p "tmp"
     ActiveRecord::Base.establish_connection("sqlite3:///tmp/foo.sqlite3")
-
-    class CreateUsers < ActiveRecord::Migration
-      self.verbose = false
-
-      def change
-        create_table :users do |t|
-          t.attachment :avatar
-        end
-      end
-    end
     CreateUsers.migrate(:up)
 
     Paperclip.options[:log] = false

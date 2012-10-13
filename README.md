@@ -53,16 +53,18 @@ Instead set them in system environment variables, and then embed them here throu
 
 Note that all credentials mentioned here are required.
 
-- If you don't have your app key and secret yet, go to your
-  [Dropbox apps](https://www.dropbox.com/developers/apps), and create a new app there, which
-  will then provide you the app key and secret. Note that your app has to have the
-  **Full Dropbox** access level (not the "App folder"). This is because the uploaded files
-  have to be stored in your `Public` directory, otherwise accessing their URLs
-  would be too slow.
+If you don't have your app key and secret yet, go to your [Dropbox apps](https://www.dropbox.com/developers/apps),
+and create a new app there, which will then provide you your app key and secret.
+Note that your app has to have the **Full Dropbox** access level (not the "App folder").
+This is because the uploaded files have to be stored in your `Public/` directory.
 
-- If you already have your app key and secret, you can obtain the rest of
-  the credentials through the `dropbox:authorize` rake task, which is described in
-  more detail at the bottom of the page.
+If you're a relatively new Dropbox user, you will have to enable your
+`Public/` folder by going to Dropbox's [help](https://www.dropbox.com/help/16/en), and the clicking the
+link for enabling it under the title "Creating a Public folder". Note that it has to be created this way
+(if it isn't already), it won't work if you create it like a normal folder.
+
+After you obtain your app key and secret, you can obtain the rest of the credentials
+through the `dropbox:authorize` rake task, which is described in more detail at the bottom of the readme.
 
 You can also namespace your credentials in `development`, `testing` and `production` environments
 (just like you do in your `database.yml`).

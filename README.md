@@ -59,7 +59,9 @@ Note that your app has to have the **Full Dropbox** access level (not the "App f
 This is because the uploaded files have to be stored in your `Public/` directory.
 
 If you're a relatively new Dropbox user, you'll probably have to enable your `Public` folder first by visiting
-[this link](https://www.dropbox.com/enable_public_folder).
+this link:
+
+https://www.dropbox.com/enable_public_folder
 
 After you obtain your app key and secret, you can obtain the rest of the credentials
 through the `dropbox:authorize` rake task, which is described in more detail at the bottom of the readme.

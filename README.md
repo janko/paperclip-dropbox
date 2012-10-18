@@ -56,7 +56,7 @@ Note that all credentials mentioned here are required.
 If you don't have your app key and secret yet, go to your [Dropbox apps](https://www.dropbox.com/developers/apps),
 and create a new app there, which will then provide you your app key and secret.
 Note that your app has to have the **Full Dropbox** access level (not the "App folder").
-This is because the uploaded files have to be stored in your `Public/` directory.
+This is because the uploaded files have to be stored in your `Public` folder.
 
 If you're a relatively new Dropbox user, you'll have to enable your `Public` folder first by visiting
 [this link](https://www.dropbox.com/enable_public_folder).

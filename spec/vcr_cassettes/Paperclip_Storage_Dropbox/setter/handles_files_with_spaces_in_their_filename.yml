@@ -2,7 +2,7 @@
 http_interactions: 
 - request: 
     method: get
-    uri: https://api.dropbox.com/1/media/dropbox/Public/photo.jpg
+    uri: https://api.dropbox.com/1/media/dropbox/Public/photo_with_spaces.jpg
     body: 
       encoding: US-ASCII
       string: ""
@@ -21,7 +21,7 @@ http_interactions:
       server: 
       - nginx/1.2.3
       date: 
-      - Sun, 21 Oct 2012 17:21:02 GMT
+      - Sun, 21 Oct 2012 17:13:30 GMT
       content-type: 
       - application/json
       transfer-encoding: 
@@ -32,12 +32,12 @@ http_interactions:
       - "*"
     body: 
       encoding: US-ASCII
-      string: "{\"error\": \"Path '/Public/photo.jpg' not found\"}"
+      string: "{\"error\": \"Path '/Public/photo_with_spaces.jpg' not found\"}"
     http_version: "1.1"
-  recorded_at: Sun, 21 Oct 2012 17:21:02 GMT
+  recorded_at: Sun, 21 Oct 2012 17:13:30 GMT
 - request: 
     method: put
-    uri: https://api-content.dropbox.com/1/files_put/dropbox/Public/photo.jpg?overwrite=false
+    uri: https://api-content.dropbox.com/1/files_put/dropbox/Public/photo_with_spaces.jpg?overwrite=false
     body: 
       encoding: ASCII-8BIT
       string: !binary |
@@ -1430,7 +1430,7 @@ http_interactions:
       server: 
       - nginx/1.2.3
       date: 
-      - Sun, 21 Oct 2012 17:21:07 GMT
+      - Sun, 21 Oct 2012 17:13:32 GMT
       content-type: 
       - text/javascript
       transfer-encoding: 
@@ -1447,12 +1447,12 @@ http_interactions:
       - no-cache
     body: 
       encoding: US-ASCII
-      string: "{\"revision\": 686, \"rev\": \"2ae01908bdc\", \"thumb_exists\": true, \"bytes\": 61570, \"modified\": \"Sun, 21 Oct 2012 17:21:07 +0000\", \"client_mtime\": \"Sun, 21 Oct 2012 17:21:07 +0000\", \"path\": \"/Public/photo.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"60.1 KB\"}"
+      string: "{\"revision\": 652, \"rev\": \"28c01908bdc\", \"thumb_exists\": true, \"bytes\": 61570, \"modified\": \"Sun, 21 Oct 2012 17:13:32 +0000\", \"client_mtime\": \"Sun, 21 Oct 2012 17:13:32 +0000\", \"path\": \"/Public/photo_with_spaces.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"60.1 KB\"}"
     http_version: "1.1"
-  recorded_at: Sun, 21 Oct 2012 17:21:07 GMT
+  recorded_at: Sun, 21 Oct 2012 17:13:32 GMT
 - request: 
     method: get
-    uri: https://api.dropbox.com/1/media/dropbox/Public/photo.jpg
+    uri: https://api.dropbox.com/1/media/dropbox/Public/photo_with_spaces.jpg
     body: 
       encoding: US-ASCII
       string: ""
@@ -1471,7 +1471,7 @@ http_interactions:
       server: 
       - nginx/1.2.3
       date: 
-      - Sun, 21 Oct 2012 17:21:09 GMT
+      - Sun, 21 Oct 2012 17:13:34 GMT
       content-type: 
       - text/javascript
       transfer-encoding: 
@@ -1490,12 +1490,12 @@ http_interactions:
       - "*"
     body: 
       encoding: US-ASCII
-      string: "{\"url\": \"https://dl.dropbox.com/0/view/m1b9xnv6wv6g00f/Public/photo.jpg\", \"expires\": \"Sun, 21 Oct 2012 21:21:09 +0000\"}"
+      string: "{\"url\": \"https://dl.dropbox.com/0/view/ibpzmxrjl6xpc9x/Public/photo_with_spaces.jpg\", \"expires\": \"Sun, 21 Oct 2012 21:13:34 +0000\"}"
     http_version: "1.1"
-  recorded_at: Sun, 21 Oct 2012 17:21:09 GMT
+  recorded_at: Sun, 21 Oct 2012 17:13:34 GMT
 - request: 
     method: get
-    uri: https://api.dropbox.com/1/media/dropbox/Public/photo.jpg
+    uri: https://api.dropbox.com/1/media/dropbox/Public/photo_with_spaces.jpg
     body: 
       encoding: US-ASCII
       string: ""
@@ -1514,7 +1514,7 @@ http_interactions:
       server: 
       - nginx/1.2.3
       date: 
-      - Sun, 21 Oct 2012 17:21:10 GMT
+      - Sun, 21 Oct 2012 17:13:35 GMT
       content-type: 
       - text/javascript
       transfer-encoding: 
@@ -1533,12 +1533,12 @@ http_interactions:
       - "*"
     body: 
       encoding: US-ASCII
-      string: "{\"url\": \"https://dl.dropbox.com/0/view/m1b9xnv6wv6g00f/Public/photo.jpg\", \"expires\": \"Sun, 21 Oct 2012 21:21:10 +0000\"}"
+      string: "{\"url\": \"https://dl.dropbox.com/0/view/ibpzmxrjl6xpc9x/Public/photo_with_spaces.jpg\", \"expires\": \"Sun, 21 Oct 2012 21:13:35 +0000\"}"
     http_version: "1.1"
-  recorded_at: Sun, 21 Oct 2012 17:21:10 GMT
+  recorded_at: Sun, 21 Oct 2012 17:13:35 GMT
 - request: 
     method: post
-    uri: https://api.dropbox.com/1/fileops/delete?root=dropbox&path=%2FPublic%2Fphoto.jpg
+    uri: https://api.dropbox.com/1/fileops/delete?root=dropbox&path=%2FPublic%2Fphoto_with_spaces.jpg
     body: 
       encoding: US-ASCII
       string: ""
@@ -1557,7 +1557,7 @@ http_interactions:
       server: 
       - nginx/1.2.3
       date: 
-      - Sun, 21 Oct 2012 17:21:12 GMT
+      - Sun, 21 Oct 2012 17:13:37 GMT
       content-type: 
       - text/javascript
       transfer-encoding: 
@@ -1567,7 +1567,7 @@ http_interactions:
       access-control-expose-headers: 
       - X-Dropbox-Metadata
       set-cookie: 
-      - gvc=MTQ3OTgyNjE0ODMzNzAwNTY1Nzk4Nzk2NTQyMDQ4ODQxMjQxMDc0; expires=Fri, 20-Oct-2017 17:21:12 GMT; Path=/; httponly
+      - gvc=MzIzMzc5NjcyNjQ5Mjc4NDEzMTQ1Mjc2Nzk1NzA4Mjg1ODQ3ODAx; expires=Fri, 20-Oct-2017 17:13:37 GMT; Path=/; httponly
       pragma: 
       - no-cache
       cache-control: 
@@ -1578,7 +1578,42 @@ http_interactions:
       - "*"
     body: 
       encoding: US-ASCII
-      string: "{\"is_deleted\": true, \"revision\": 687, \"rev\": \"2af01908bdc\", \"thumb_exists\": true, \"bytes\": 0, \"modified\": \"Sun, 21 Oct 2012 17:21:12 +0000\", \"client_mtime\": \"Wed, 31 Dec 1969 23:59:59 +0000\", \"path\": \"/Public/photo.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"0 bytes\"}"
+      string: "{\"is_deleted\": true, \"revision\": 653, \"rev\": \"28d01908bdc\", \"thumb_exists\": true, \"bytes\": 0, \"modified\": \"Sun, 21 Oct 2012 17:13:36 +0000\", \"client_mtime\": \"Wed, 31 Dec 1969 23:59:59 +0000\", \"path\": \"/Public/photo_with_spaces.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"0 bytes\"}"
     http_version: "1.1"
-  recorded_at: Sun, 21 Oct 2012 17:21:12 GMT
+  recorded_at: Sun, 21 Oct 2012 17:13:37 GMT
+- request: 
+    method: get
+    uri: https://api.dropbox.com/1/media/dropbox/Public/photo_with_spaces.jpg
+    body: 
+      encoding: US-ASCII
+      string: ""
+    headers: 
+      accept: 
+      - "*/*"
+      user-agent: 
+      - OfficialDropboxRubySDK/1.5.1
+      authorization: 
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="op7z8yczcf6hqbg", oauth_token="pfapjkwepp4gtig", oauth_signature="t9xl9p9xduqk4cp&cg0oln27dm66miv"
+  response: 
+    status: 
+      code: 404
+      message: Not Found
+    headers: 
+      server: 
+      - nginx/1.2.3
+      date: 
+      - Sun, 21 Oct 2012 17:13:38 GMT
+      content-type: 
+      - application/json
+      transfer-encoding: 
+      - chunked
+      connection: 
+      - close
+      access-control-allow-origin: 
+      - "*"
+    body: 
+      encoding: US-ASCII
+      string: "{\"error\": \"Path '/Public/photo_with_spaces.jpg' not found\"}"
+    http_version: "1.1"
+  recorded_at: Sun, 21 Oct 2012 17:13:38 GMT
 recorded_with: VCR 2.2.5

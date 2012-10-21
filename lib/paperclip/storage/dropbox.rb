@@ -44,11 +44,13 @@ module Paperclip
       end
 
       def url(*args)
-        style = args.first.is_a?(Symbol) ? args.first : default_style
-        options = args.last.is_a?(Hash) ? args.last : {}
-        query = options[:download] ? "?dl=1" : ""
+        unless blank?
+          style = args.first.is_a?(Symbol) ? args.first : default_style
+          options = args.last.is_a?(Hash) ? args.last : {}
+          query = options[:download] ? "?dl=1" : ""
 
-        File.join("http://dl.dropbox.com/u/#{user_id}", path_for_url(style) + query)
+          File.join("http://dl.dropbox.com/u/#{user_id}", path_for_url(style) + query)
+        end
       end
 
       def path(style)

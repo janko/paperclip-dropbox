@@ -26,116 +26,116 @@ describe Paperclip::Storage::Dropbox, :vcr do
     Paperclip.options[:log] = false
   end
 
-  CONTENT_TYPES = {
-    "pdf" => "application/pdf"
-  }
-
-  def file(filename)
-    extension = filename[/(?<=\.)\w{3,4}$/]
-    content_type = CONTENT_TYPES[extension]
-    path = "#{RSPEC_DIR}/files/#{filename}"
-    Rack::Test::UploadedFile.new(path, content_type)
+  def uploaded_file(filename, content_type)
+    Rack::Test::UploadedFile.new("#{RSPEC_DIR}/files/#{filename}", content_type)
   end
 
-  describe "arguments" do
+  describe "arguments for #has_attached_file" do
     describe "dropbox_credentials" do
-      before(:each) do
-        class User < ActiveRecord::Base
-          def self.add_dropbox_avatar(options = {})
-            has_attached_file :avatar,
-              {storage: :dropbox}.merge(options)
-          end
-        end
+      def set_options(options)
+        stub_const("User", Class.new(ActiveRecord::Base) do
+          has_attached_file :avatar,
+            {storage: :dropbox}.merge(options)
+        end)
       end
 
       it "complains when not properly set" do
-        User.add_dropbox_avatar(dropbox_credentials: 1)
+        set_options(dropbox_credentials: 1)
         expect { User.new.avatar }.to raise_error(ArgumentError)
 
-        User.add_dropbox_avatar(dropbox_credentials: {})
+        set_options(dropbox_credentials: {})
         expect { User.new.avatar }.to raise_error(KeyError)
       end
 
       it "accepts a path to file" do
-        path = "#{RSPEC_DIR}/dropbox.yml"
-        User.add_dropbox_avatar(dropbox_credentials: path)
+        set_options(dropbox_credentials: "#{RSPEC_DIR}/dropbox.yml")
         expect { User.new.avatar }.to_not raise_error(KeyError)
       end
 
       it "accepts an open file" do
-        file = File.open("#{RSPEC_DIR}/dropbox.yml")
-        User.add_dropbox_avatar(dropbox_credentials: file)
+        set_options(dropbox_credentials: File.open("#{RSPEC_DIR}/dropbox.yml"))
         expect { User.new.avatar }.to_not raise_error(KeyError)
       end
 
       it "accepts a hash" do
-        hash = YAML.load(ERB.new(File.read("#{RSPEC_DIR}/dropbox.yml")).result)
-        User.add_dropbox_avatar(dropbox_credentials: hash)
+        set_options(dropbox_credentials: YAML.load(ERB.new(File.read("#{RSPEC_DIR}/dropbox.yml")).result))
         expect { User.new.avatar }.to_not raise_error(KeyError)
       end
 
       it "recognizes environments" do
         hash = YAML.load(ERB.new(File.read("#{RSPEC_DIR}/dropbox.yml")).result)
 
-        User.add_dropbox_avatar(dropbox_credentials: {development: hash}, dropbox_options: {environment: "development"})
+        set_options(dropbox_credentials: {development: hash}, dropbox_options: {environment: "development"})
         expect { User.new.avatar }.to_not raise_error(KeyError)
 
-        User.add_dropbox_avatar(dropbox_credentials: {development: hash}, dropbox_options: {environment: "production"})
+        set_options(dropbox_credentials: {development: hash}, dropbox_options: {environment: "production"})
         expect { User.new.avatar }.to raise_error(KeyError)
-      end
-
-      after(:each) do
-        Object.send(:remove_const, :User)
       end
     end
 
     describe "dropbox_options" do
-      before(:each) do
-        class User < ActiveRecord::Base
-          def self.add_dropbox_avatar(options = {})
-            has_attached_file :avatar,
-              storage: :dropbox,
-              dropbox_credentials: "#{RSPEC_DIR}/dropbox.yml",
-              dropbox_options: options,
-              styles: {medium: "300x300"}
-          end
-        end
+      def set_options(options)
+        stub_const("User", Class.new(ActiveRecord::Base) do
+          has_attached_file :avatar,
+            storage: :dropbox,
+            dropbox_credentials: "#{RSPEC_DIR}/dropbox.yml",
+            dropbox_options: options,
+            styles: {medium: "300x300"}
+        end)
       end
 
       describe "path" do
         it "puts the instance in the scope, passes the style and appends the extension and style" do
-          User.add_dropbox_avatar path: proc { |style| "#{style}/#{self.class.name}" }
-          User.create(avatar: file("photo.jpg"))
+          set_options(path: proc { |style| "#{style}/#{self.class.name}" })
+          user = User.create(avatar: uploaded_file("photo.jpg", "image/jpeg"))
           "Public/original/User.jpg".should be_on_dropbox
           "Public/medium/User_medium.jpg".should be_on_dropbox
+          user.destroy
         end
 
         it "doesn't duplicate the extension" do
-          User.add_dropbox_avatar path: proc { avatar.original_filename }
-          User.create(avatar: file("photo.jpg"))
+          set_options(path: proc { avatar.original_filename })
+          user = User.create(avatar: uploaded_file("photo.jpg", "image/jpeg"))
           "Public/photo.jpg".should be_on_dropbox
+          user.destroy
         end
 
         it "has the #original_filename default" do
-          User.add_dropbox_avatar({})
-          User.create(avatar: file("photo.jpg"))
+          set_options({})
+          user = User.create(avatar: uploaded_file("photo.jpg", "image/jpeg"))
           "Public/photo.jpg".should be_on_dropbox
+          user.destroy
         end
       end
 
       describe "unique_filename" do
         it "makes the file path unique" do
-          User.add_dropbox_avatar unique_filename: true
-          User.create(avatar: file("photo.jpg"))
-          expect { User.create(avatar: file("photo.jpg")) }.to_not raise_error(Paperclip::Storage::Dropbox::FileExists)
+          set_options(unique_filename: true)
+          user = User.create(avatar: uploaded_file("photo.jpg", "image/jpeg"))
+          expect { User.create(avatar: uploaded_file("photo.jpg", "image/jpeg")) }.to_not raise_error(Paperclip::Storage::Dropbox::FileExists)
+          User.destroy_all
         end
       end
+    end
+  end
 
-      after(:each) do
-        User.destroy_all
-        Object.send(:remove_const, :User)
+  describe "setter" do
+    before(:all) do
+      class User < ActiveRecord::Base
+        has_attached_file :avatar,
+          storage: :dropbox,
+          dropbox_credentials: "#{RSPEC_DIR}/dropbox.yml"
       end
     end
+
+    it "handles files with spaces in their filename" do
+      user = User.create(avatar: uploaded_file("photo with spaces.jpg", "image/jpeg"))
+      "Public/photo_with_spaces.jpg".should be_on_dropbox
+      user.destroy
+      "Public/photo_with_spaces.jpg".should_not be_on_dropbox
+    end
+
+    after(:all) { Object.send(:remove_const, "User") }
   end
 
   describe "#url" do
@@ -148,8 +148,10 @@ describe Paperclip::Storage::Dropbox, :vcr do
       end
     end
 
-    before(:each) do
-      @user = User.create(avatar: file("photo.jpg"))
+    before(:each) { @user = User.create(avatar: uploaded_file("photo.jpg", "image/jpeg")) }
+
+    it "returns nil when the file doesn't exist" do
+      User.new.avatar.url.should be_nil
     end
 
     it "is valid" do
@@ -170,13 +172,9 @@ describe Paperclip::Storage::Dropbox, :vcr do
       response.code.to_i.should == 200
     end
 
-    after(:each) do
-      User.destroy_all
-    end
+    after(:each) { @user.destroy }
 
-    after(:all) do
-      Object.send(:remove_const, :User)
-    end
+    after(:all) { Object.send(:remove_const, :User) }
   end
 
   describe "CUD" do
@@ -189,62 +187,51 @@ describe Paperclip::Storage::Dropbox, :vcr do
     end
 
     describe "create" do
-      before(:each) do
-        User.create(avatar: file("photo.jpg"))
-      end
+      before(:each) { @user = User.create(avatar: uploaded_file("photo.jpg", "image/jpeg")) }
 
       it "puts the file on Dropbox" do
         "Public/photo.jpg".should be_on_dropbox
       end
 
       it "raises an exception on same filenames" do
-        expect { User.create(avatar: file("photo.jpg")) }.to raise_error(Paperclip::Storage::Dropbox::FileExists)
+        expect { User.create(avatar: uploaded_file("photo.jpg", "image/jpeg")) }.to raise_error(Paperclip::Storage::Dropbox::FileExists)
       end
 
-      after(:each) do
-        User.destroy_all
-      end
+      after(:each) { @user.destroy }
     end
 
     describe "update" do
-      before(:each) do
-        User.create(avatar: file("photo.jpg"))
-      end
+      before(:each) { @user = User.create(avatar: uploaded_file("photo.jpg", "image/jpeg")) }
 
       it "deletes the old file if set to nil" do
-        User.first.update_attributes(avatar: nil)
+        @user.update_attributes(avatar: nil)
         "Public/photo.jpg".should_not be_on_dropbox
       end
 
       it "deletes the old file and uploads the new one" do
-        User.first.update_attributes(avatar: file("another_photo.jpg"))
+        @user.update_attributes(avatar: uploaded_file("photo.jpg", "image/jpeg"))
+        @user.update_attributes(avatar: uploaded_file("another_photo.jpg", "image/jpeg"))
         "Public/photo.jpg".should_not be_on_dropbox
         "Public/another_photo.jpg".should be_on_dropbox
       end
 
-      after(:each) do
-        User.destroy_all
-      end
+      after(:each) { @user.destroy }
     end
 
     describe "destroy" do
-      before(:each) do
-        User.create(avatar: file("photo.jpg"))
-      end
+      before(:each) { @user = User.create(avatar: uploaded_file("photo.jpg", "image/jpeg")) }
 
       it "deletes the uploaded file" do
-        User.first.destroy
+        @user.destroy
         "Public/photo.jpg".should_not be_on_dropbox
       end
 
       it "doesn't raise errors if there are no files to delete" do
-        User.first.avatar.send(:dropbox_client).file_delete("Public/photo.jpg")
-        expect { User.first.destroy }.to_not raise_error
+        @user.avatar.send(:dropbox_client).file_delete("Public/photo.jpg")
+        expect { @user.destroy }.to_not raise_error
       end
 
-      after(:each) do
-        User.destroy_all
-      end
+      after(:each) { @user.destroy }
     end
 
     after(:all) do

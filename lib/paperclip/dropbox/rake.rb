@@ -34,5 +34,3 @@ user_id: #{account_info["uid"]}
     end
   end
 end
-
-load "paperclip/dropbox/tasks/authorize.rake"

@@ -43,7 +43,7 @@ module Paperclip
       end
 
       def url(*args)
-        unless blank?
+        if present?
           style = args.first.is_a?(Symbol) ? args.first : default_style
           options = args.last.is_a?(Hash) ? args.last : {}
           query = options[:download] ? "?dl=1" : ""

@@ -1,6 +1,5 @@
 require 'dropbox_sdk'
 require 'active_support/core_ext/hash/keys'
-require 'active_support/core_ext/hash/slice'
 require 'active_support/inflector/methods'
 require 'yaml'
 require 'erb'

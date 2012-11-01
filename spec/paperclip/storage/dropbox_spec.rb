@@ -19,6 +19,7 @@ describe Paperclip::Storage::Dropbox, :vcr do
   before(:all) do
     ActiveRecord::Base.send(:include, Paperclip::Glue)
 
+    FileUtils.rm_rf "tmp"
     FileUtils.mkdir_p "tmp"
     ActiveRecord::Base.establish_connection("sqlite3:///tmp/foo.sqlite3")
     CreateUsers.migrate(:up)

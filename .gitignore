@@ -5,3 +5,4 @@ pkg/
 tmp
 .rspec
 *.DS_Store
+spec/config.yml

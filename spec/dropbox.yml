@@ -1,5 +1,5 @@
-app_key: "op7z8yczcf6hqbg"
-app_secret: "t9xl9p9xduqk4cp"
-access_token: "pfapjkwepp4gtig"
-access_token_secret: "cg0oln27dm66miv"
-user_id: "16783504"
+app_key: <%= CONFIG[:app_key] %>
+app_secret: <%= CONFIG[:app_secret] %>
+access_token: <%= CONFIG[:access_token] %>
+access_token_secret: <%= CONFIG[:access_token_secret] %>
+user_id: <%= CONFIG[:user_id] %>

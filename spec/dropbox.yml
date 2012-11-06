@@ -1,5 +1,0 @@
-app_key: <%= CONFIG[:app_key] %>
-app_secret: <%= CONFIG[:app_secret] %>
-access_token: <%= CONFIG[:access_token] %>
-access_token_secret: <%= CONFIG[:access_token_secret] %>
-user_id: <%= CONFIG[:user_id] %>

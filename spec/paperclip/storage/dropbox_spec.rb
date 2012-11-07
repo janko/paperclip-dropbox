@@ -49,22 +49,22 @@ describe Paperclip::Storage::Dropbox, :vcr do
       end
 
       it "accepts a path to file" do
-        set_options(dropbox_credentials: "#{RSPEC_DIR}/dropbox.yml")
+        set_options(dropbox_credentials: CREDENTIALS_FILE)
         expect { User.new.avatar }.to_not raise_error(KeyError)
       end
 
       it "accepts an open file" do
-        set_options(dropbox_credentials: File.open("#{RSPEC_DIR}/dropbox.yml"))
+        set_options(dropbox_credentials: File.open(CREDENTIALS_FILE))
         expect { User.new.avatar }.to_not raise_error(KeyError)
       end
 
       it "accepts a hash" do
-        set_options(dropbox_credentials: YAML.load(ERB.new(File.read("#{RSPEC_DIR}/dropbox.yml")).result))
+        set_options(dropbox_credentials: CREDENTIALS)
         expect { User.new.avatar }.to_not raise_error(KeyError)
       end
 
       it "recognizes environments" do
-        hash = YAML.load(ERB.new(File.read("#{RSPEC_DIR}/dropbox.yml")).result)
+        hash = YAML.load(ERB.new(File.read(CREDENTIALS_FILE)).result)
 
         set_options(dropbox_credentials: {development: hash}, dropbox_options: {environment: "development"})
         expect { User.new.avatar }.to_not raise_error(KeyError)
@@ -79,7 +79,7 @@ describe Paperclip::Storage::Dropbox, :vcr do
         stub_const("User", Class.new(ActiveRecord::Base) do
           has_attached_file :avatar,
             storage: :dropbox,
-            dropbox_credentials: "#{RSPEC_DIR}/dropbox.yml",
+            dropbox_credentials: CREDENTIALS_FILE,
             dropbox_options: options,
             styles: {medium: "300x300"}
         end)
@@ -125,7 +125,7 @@ describe Paperclip::Storage::Dropbox, :vcr do
       class User < ActiveRecord::Base
         has_attached_file :avatar,
           storage: :dropbox,
-          dropbox_credentials: "#{RSPEC_DIR}/dropbox.yml"
+          dropbox_credentials: CREDENTIALS_FILE
       end
     end
 
@@ -136,7 +136,7 @@ describe Paperclip::Storage::Dropbox, :vcr do
       "Public/photo_with_spaces.jpg".should_not be_on_dropbox
     end
 
-    after(:all) { Object.send(:remove_const, "User") }
+    after(:all) { Object.send(:remove_const, :User) }
   end
 
   describe "#url" do
@@ -144,7 +144,7 @@ describe Paperclip::Storage::Dropbox, :vcr do
       class User < ActiveRecord::Base
         has_attached_file :avatar,
           storage: :dropbox,
-          dropbox_credentials: "#{RSPEC_DIR}/dropbox.yml",
+          dropbox_credentials: CREDENTIALS_FILE,
           styles: {medium: "300x300"}
       end
     end
@@ -173,7 +173,7 @@ describe Paperclip::Storage::Dropbox, :vcr do
       response.code.to_i.should == 200
     end
 
-    after(:each) { @user.destroy }
+    after(:each) { @user.destroy if not @user.nil? }
 
     after(:all) { Object.send(:remove_const, :User) }
   end
@@ -183,7 +183,7 @@ describe Paperclip::Storage::Dropbox, :vcr do
       class User < ActiveRecord::Base
         has_attached_file :avatar,
           storage: :dropbox,
-          dropbox_credentials: "#{RSPEC_DIR}/dropbox.yml"
+          dropbox_credentials: CREDENTIALS_FILE
       end
     end
 
@@ -198,7 +198,7 @@ describe Paperclip::Storage::Dropbox, :vcr do
         expect { User.create(avatar: uploaded_file("photo.jpg", "image/jpeg")) }.to raise_error(Paperclip::Storage::Dropbox::FileExists)
       end
 
-      after(:each) { @user.destroy }
+      after(:each) { @user.destroy if not @user.nil? }
     end
 
     describe "update" do
@@ -216,7 +216,7 @@ describe Paperclip::Storage::Dropbox, :vcr do
         "Public/another_photo.jpg".should be_on_dropbox
       end
 
-      after(:each) { @user.destroy }
+      after(:each) { @user.destroy if not @user.nil? }
     end
 
     describe "destroy" do
@@ -232,7 +232,7 @@ describe Paperclip::Storage::Dropbox, :vcr do
         expect { @user.destroy }.to_not raise_error
       end
 
-      after(:each) { @user.destroy }
+      after(:each) { @user.destroy if not @user.nil? }
     end
 
     after(:all) do

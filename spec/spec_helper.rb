@@ -11,11 +11,16 @@ CREDENTIALS_FILE = "#{RSPEC_DIR}/dropbox.yml"
 if File.exists?(CREDENTIALS_FILE)
   CREDENTIALS = YAML.load(ERB.new(File.read(CREDENTIALS_FILE)).result).symbolize_keys
 else
-  puts "\n### ERROR ###"
-  puts "Credential file not found at #{CREDENTIALS_FILE}"
-  puts "Copy dropbox.yml.example and fill in your app credentials.\n\n"
-  raise 'credential file not found'
+  puts <<-EOS
+
+### ERROR ###
+Credential file not found at #{CREDENTIALS_FILE}.
+Copy dropbox.yml.example and fill in your credentials.
+
+  EOS
+  exit
 end
+
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true

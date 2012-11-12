@@ -14,8 +14,8 @@ else
   puts <<-EOS
 
 ### ERROR ###
-Credential file not found at #{CREDENTIALS_FILE}.
-Copy dropbox.yml.example and fill in your credentials.
+Credential file not found at spec/dropbox.yml.
+Copy spec/dropbox.yml.example and fill in your credentials.
 
   EOS
   exit

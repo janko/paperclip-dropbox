@@ -142,8 +142,7 @@ your `Rakefile`:
 
 ```ruby
 # Rakefile
-require "rake"
-require "paperclip/dropbox/rake"
+load "paperclip/dropbox/tasks.rake"
 ```
 
 ## License

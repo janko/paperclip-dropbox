@@ -15,6 +15,13 @@ class CreateUsers < ActiveRecord::Migration
   end
 end
 
+def reset_user_class
+  if defined?(User)
+    Object.send(:remove_const, 'User')
+  end
+  Object.const_set('User', Class.new(ActiveRecord::Base))
+end
+
 describe Paperclip::Storage::Dropbox, :vcr do
   before(:all) do
     ActiveRecord::Base.send(:include, Paperclip::Glue)
@@ -23,6 +30,7 @@ describe Paperclip::Storage::Dropbox, :vcr do
     FileUtils.mkdir_p "tmp"
     ActiveRecord::Base.establish_connection("sqlite3:///tmp/foo.sqlite3")
     CreateUsers.migrate(:up)
+    reset_user_class
 
     Paperclip.options[:log] = false
   end
@@ -91,21 +99,18 @@ describe Paperclip::Storage::Dropbox, :vcr do
           user = User.create(avatar: uploaded_file("photo.jpg", "image/jpeg"))
           "Public/original/User.jpg".should be_on_dropbox
           "Public/medium/User_medium.jpg".should be_on_dropbox
-          user.destroy
         end
 
         it "doesn't duplicate the extension" do
           set_options(path: proc { avatar.original_filename })
           user = User.create(avatar: uploaded_file("photo.jpg", "image/jpeg"))
           "Public/photo.jpg".should be_on_dropbox
-          user.destroy
         end
 
         it "has the #original_filename default" do
           set_options({})
           user = User.create(avatar: uploaded_file("photo.jpg", "image/jpeg"))
           "Public/photo.jpg".should be_on_dropbox
-          user.destroy
         end
       end
 
@@ -114,7 +119,6 @@ describe Paperclip::Storage::Dropbox, :vcr do
           set_options(unique_filename: true)
           user = User.create(avatar: uploaded_file("photo.jpg", "image/jpeg"))
           expect { User.create(avatar: uploaded_file("photo.jpg", "image/jpeg")) }.to_not raise_error(Paperclip::Storage::Dropbox::FileExists)
-          User.destroy_all
         end
       end
     end
@@ -136,7 +140,7 @@ describe Paperclip::Storage::Dropbox, :vcr do
       "Public/photo_with_spaces.jpg".should_not be_on_dropbox
     end
 
-    after(:all) { Object.send(:remove_const, :User) }
+    after(:all) { reset_user_class }
   end
 
   describe "#url" do
@@ -173,9 +177,7 @@ describe Paperclip::Storage::Dropbox, :vcr do
       response.code.to_i.should == 200
     end
 
-    after(:each) { @user.destroy if not @user.nil? }
-
-    after(:all) { Object.send(:remove_const, :User) }
+    after(:all) { reset_user_class }
   end
 
   describe "CUD" do
@@ -197,8 +199,6 @@ describe Paperclip::Storage::Dropbox, :vcr do
       it "raises an exception on same filenames" do
         expect { User.create(avatar: uploaded_file("photo.jpg", "image/jpeg")) }.to raise_error(Paperclip::Storage::Dropbox::FileExists)
       end
-
-      after(:each) { @user.destroy if not @user.nil? }
     end
 
     describe "update" do
@@ -215,8 +215,6 @@ describe Paperclip::Storage::Dropbox, :vcr do
         "Public/photo.jpg".should_not be_on_dropbox
         "Public/another_photo.jpg".should be_on_dropbox
       end
-
-      after(:each) { @user.destroy if not @user.nil? }
     end
 
     describe "destroy" do
@@ -231,13 +229,13 @@ describe Paperclip::Storage::Dropbox, :vcr do
         @user.avatar.send(:dropbox_client).file_delete("Public/photo.jpg")
         expect { @user.destroy }.to_not raise_error
       end
-
-      after(:each) { @user.destroy if not @user.nil? }
     end
 
-    after(:all) do
-      Object.send(:remove_const, :User)
-    end
+    after(:all) { reset_user_class }
+  end
+
+  after(:each) do
+    User.destroy_all
   end
 
   after(:all) do

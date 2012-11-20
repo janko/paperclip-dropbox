@@ -15,13 +15,6 @@ class CreateUsers < ActiveRecord::Migration
   end
 end
 
-def reset_user_class
-  if defined?(User)
-    Object.send(:remove_const, 'User')
-  end
-  Object.const_set('User', Class.new(ActiveRecord::Base))
-end
-
 describe Paperclip::Storage::Dropbox, :vcr do
   before(:all) do
     ActiveRecord::Base.send(:include, Paperclip::Glue)
@@ -30,7 +23,6 @@ describe Paperclip::Storage::Dropbox, :vcr do
     FileUtils.mkdir_p "tmp"
     ActiveRecord::Base.establish_connection("sqlite3:///tmp/foo.sqlite3")
     CreateUsers.migrate(:up)
-    reset_user_class
 
     Paperclip.options[:log] = false
   end
@@ -125,12 +117,12 @@ describe Paperclip::Storage::Dropbox, :vcr do
   end
 
   describe "setter" do
-    before(:all) do
-      class User < ActiveRecord::Base
+    before(:each) do
+      stub_const("User", Class.new(ActiveRecord::Base) do
         has_attached_file :avatar,
           storage: :dropbox,
           dropbox_credentials: CREDENTIALS_FILE
-      end
+      end)
     end
 
     it "handles files with spaces in their filename" do
@@ -139,21 +131,19 @@ describe Paperclip::Storage::Dropbox, :vcr do
       user.destroy
       "Public/photo_with_spaces.jpg".should_not be_on_dropbox
     end
-
-    after(:all) { reset_user_class }
   end
 
   describe "#url" do
-    before(:all) do
-      class User < ActiveRecord::Base
+    before(:each) do
+      stub_const("User", Class.new(ActiveRecord::Base) do
         has_attached_file :avatar,
           storage: :dropbox,
           dropbox_credentials: CREDENTIALS_FILE,
           styles: {medium: "300x300"}
-      end
-    end
+      end)
 
-    before(:each) { @user = User.create(avatar: uploaded_file("photo.jpg", "image/jpeg")) }
+      @user = User.create(avatar: uploaded_file("photo.jpg", "image/jpeg"))
+    end
 
     it "returns nil when the file doesn't exist" do
       User.new.avatar.url.should be_nil
@@ -176,22 +166,20 @@ describe Paperclip::Storage::Dropbox, :vcr do
       response = Net::HTTP.get_response(URI.parse(@user.avatar.url(:medium, download: true)))
       response.code.to_i.should == 200
     end
-
-    after(:all) { reset_user_class }
   end
 
   describe "CUD" do
-    before(:all) do
-      class User < ActiveRecord::Base
+    before(:each) do
+      stub_const("User", Class.new(ActiveRecord::Base) do
         has_attached_file :avatar,
           storage: :dropbox,
           dropbox_credentials: CREDENTIALS_FILE
-      end
+      end)
+
+      @user = User.create(avatar: uploaded_file("photo.jpg", "image/jpeg"))
     end
 
     describe "create" do
-      before(:each) { @user = User.create(avatar: uploaded_file("photo.jpg", "image/jpeg")) }
-
       it "puts the file on Dropbox" do
         "Public/photo.jpg".should be_on_dropbox
       end
@@ -202,8 +190,6 @@ describe Paperclip::Storage::Dropbox, :vcr do
     end
 
     describe "update" do
-      before(:each) { @user = User.create(avatar: uploaded_file("photo.jpg", "image/jpeg")) }
-
       it "deletes the old file if set to nil" do
         @user.update_attributes(avatar: nil)
         "Public/photo.jpg".should_not be_on_dropbox
@@ -218,8 +204,6 @@ describe Paperclip::Storage::Dropbox, :vcr do
     end
 
     describe "destroy" do
-      before(:each) { @user = User.create(avatar: uploaded_file("photo.jpg", "image/jpeg")) }
-
       it "deletes the uploaded file" do
         @user.destroy
         "Public/photo.jpg".should_not be_on_dropbox
@@ -230,12 +214,12 @@ describe Paperclip::Storage::Dropbox, :vcr do
         expect { @user.destroy }.to_not raise_error
       end
     end
-
-    after(:all) { reset_user_class }
   end
 
   after(:each) do
-    User.destroy_all
+    if defined?(User)
+      User.destroy_all
+    end
   end
 
   after(:all) do

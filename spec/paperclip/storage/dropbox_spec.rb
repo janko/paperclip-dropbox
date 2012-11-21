@@ -27,7 +27,7 @@ describe Paperclip::Storage::Dropbox, :vcr do
     Paperclip.options[:log] = false
   end
 
-  def uploaded_file(filename, content_type)
+  def uploaded_file(filename, content_type = "text/plain")
     Rack::Test::UploadedFile.new("#{RSPEC_DIR}/files/#{filename}", content_type)
   end
 
@@ -165,6 +165,58 @@ describe Paperclip::Storage::Dropbox, :vcr do
       response.code.to_i.should == 200
       response = Net::HTTP.get_response(URI.parse(@user.avatar.url(:medium, download: true)))
       response.code.to_i.should == 200
+    end
+  end
+
+  describe "#path_for_url" do
+    def set_options(options)
+      stub_const("User", Class.new(ActiveRecord::Base) do
+        has_attached_file :avatar,
+          storage: :dropbox,
+          dropbox_credentials: CREDENTIALS_FILE,
+          dropbox_options: options
+      end)
+    end
+
+    it "handles files with varying extension lengths" do
+      set_options({})
+      ["test_file", "test_file.c", "test_file.markdown"].each do |filename|
+        user = User.new(avatar: uploaded_file(filename))
+        user.avatar.path_for_url(user.avatar.default_style).should == filename
+      end
+    end
+
+    it "appends the style name, preserving the extension if one exists" do
+      set_options({})
+
+      user = User.new(avatar: uploaded_file("test_file.c"))
+      user.avatar.path_for_url(:dummy).should == "test_file_dummy.c"
+
+      user = User.new(avatar: uploaded_file("test_file"))
+      user.avatar.path_for_url(:dummy).should == "test_file_dummy"
+    end
+
+    it "uses the result of the path proc if one is provided" do
+      set_options(path: proc { |style| "avatars/#{style}/filename" })
+      user = User.new(avatar: uploaded_file("test_file"))
+      user.avatar.path_for_url(:dummy).should == "avatars/dummy/filename_dummy"
+    end
+
+    it "executes the path proc in the context of the model instance" do
+      set_options(path: proc { |style| "#{self.class.name}" })
+      user = User.new(avatar: uploaded_file("test_file"))
+      user.avatar.path_for_url(user.avatar.default_style).should == "User"
+    end
+
+    it "makes the path unique per model if unique_filename is set" do
+      set_options(unique_filename: true)
+      user1 = User.new(avatar: uploaded_file("test_file"))
+      user2 = User.new(avatar: uploaded_file("test_file"))
+      user1.id = 1
+      user2.id = 2
+
+      user1.avatar.path_for_url(:dummy).
+        should_not == user2.avatar.path_for_url(:dummy)
     end
   end
 

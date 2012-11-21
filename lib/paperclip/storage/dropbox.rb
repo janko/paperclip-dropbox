@@ -57,10 +57,14 @@ module Paperclip
       end
 
       def path_for_url(style)
-        result = instance.instance_exec(style, &file_path)
-        result += extension if result !~ /\.\w{3,4}$/
+        path = instance.instance_exec(style, &file_path)
         style_suffix = (style != default_style ? "_#{style}" : "")
-        result.sub(extension, "#{style_suffix}#{extension}")
+
+        if original_extension && path =~ /#{original_extension}$/
+          path.sub(original_extension, "#{style_suffix}#{original_extension}")
+        else
+          path + style_suffix + original_extension.to_s
+        end
       end
 
       def copy_to_local_file(style, destination_path)
@@ -71,8 +75,8 @@ module Paperclip
 
       private
 
-      def extension
-        original_filename[/\.\w{3,4}$/]
+      def original_extension
+        original_filename[/\.[^.]+$/]
       end
 
       def user_id

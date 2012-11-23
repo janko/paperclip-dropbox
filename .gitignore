@@ -6,3 +6,4 @@ tmp
 .rspec
 *.DS_Store
 spec/dropbox.yml
+spec/app_folder.yml

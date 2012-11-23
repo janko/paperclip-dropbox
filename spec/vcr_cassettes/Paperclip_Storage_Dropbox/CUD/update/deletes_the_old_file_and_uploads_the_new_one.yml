@@ -2,7 +2,7 @@
 http_interactions: 
 - request: 
     method: get
-    uri: https://api.dropbox.com/1/media/dropbox/Public/photo.jpg
+    uri: https://api.dropbox.com/1/metadata/dropbox/Public/photo.jpg?file_limit=25000&list=true&include_deleted=false
     body: 
       encoding: US-ASCII
       string: ""
@@ -12,29 +12,37 @@ http_interactions:
       user-agent: 
       - OfficialDropboxRubySDK/1.5.1
       authorization: 
-      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>", oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<DROPBOX_APP_KEY>", oauth_token="<DROPBOX_ACCESS_TOKEN>", oauth_signature="<DROPBOX_APP_SECRET>&<DROPBOX_ACCESS_TOKEN_SECRET>"
   response: 
     status: 
-      code: 404
-      message: Not Found
+      code: 200
+      message: OK
     headers: 
       server: 
       - nginx/1.2.3
       date: 
-      - Tue, 06 Nov 2012 21:08:52 GMT
+      - Fri, 23 Nov 2012 03:05:21 GMT
       content-type: 
-      - application/json
+      - text/javascript
       transfer-encoding: 
       - chunked
       connection: 
       - close
+      access-control-expose-headers: 
+      - X-Dropbox-Metadata
+      pragma: 
+      - no-cache
+      cache-control: 
+      - no-cache
+      x-frame-options: 
+      - SAMEORIGIN
       access-control-allow-origin: 
       - "*"
     body: 
       encoding: US-ASCII
-      string: "{\"error\": \"Path '/Public/photo.jpg' not found\"}"
+      string: "{\"is_deleted\": true, \"revision\": 1629, \"rev\": \"65d0b59ac45\", \"thumb_exists\": true, \"bytes\": 0, \"modified\": \"Fri, 23 Nov 2012 03:05:18 +0000\", \"client_mtime\": \"Wed, 31 Dec 1969 23:59:59 +0000\", \"path\": \"/Public/photo.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"0 bytes\"}"
     http_version: "1.1"
-  recorded_at: Tue, 06 Nov 2012 21:08:52 GMT
+  recorded_at: Fri, 23 Nov 2012 03:05:21 GMT
 - request: 
     method: put
     uri: https://api-content.dropbox.com/1/files_put/dropbox/Public/photo.jpg?overwrite=false
@@ -1421,7 +1429,7 @@ http_interactions:
       content-length: 
       - 61570
       authorization: 
-      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>", oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<DROPBOX_APP_KEY>", oauth_token="<DROPBOX_ACCESS_TOKEN>", oauth_signature="<DROPBOX_APP_SECRET>&<DROPBOX_ACCESS_TOKEN_SECRET>"
   response: 
     status: 
       code: 200
@@ -1430,7 +1438,7 @@ http_interactions:
       server: 
       - nginx/1.2.3
       date: 
-      - Tue, 06 Nov 2012 21:08:53 GMT
+      - Fri, 23 Nov 2012 03:05:22 GMT
       content-type: 
       - text/javascript
       transfer-encoding: 
@@ -1447,12 +1455,12 @@ http_interactions:
       - no-cache
     body: 
       encoding: US-ASCII
-      string: "{\"revision\": 469, \"rev\": \"1d50b59ac45\", \"thumb_exists\": true, \"bytes\": 61570, \"modified\": \"Tue, 06 Nov 2012 21:08:53 +0000\", \"client_mtime\": \"Tue, 06 Nov 2012 21:08:53 +0000\", \"path\": \"/Public/photo.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"60.1 KB\"}"
+      string: "{\"revision\": 1630, \"rev\": \"65e0b59ac45\", \"thumb_exists\": true, \"bytes\": 61570, \"modified\": \"Fri, 23 Nov 2012 03:05:22 +0000\", \"client_mtime\": \"Fri, 23 Nov 2012 03:05:22 +0000\", \"path\": \"/Public/photo.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"60.1 KB\"}"
     http_version: "1.1"
-  recorded_at: Tue, 06 Nov 2012 21:08:53 GMT
+  recorded_at: Fri, 23 Nov 2012 03:05:22 GMT
 - request: 
     method: get
-    uri: https://api.dropbox.com/1/media/dropbox/Public/photo.jpg
+    uri: https://api.dropbox.com/1/metadata/dropbox/Public/photo.jpg?file_limit=25000&list=true&include_deleted=false
     body: 
       encoding: US-ASCII
       string: ""
@@ -1462,7 +1470,7 @@ http_interactions:
       user-agent: 
       - OfficialDropboxRubySDK/1.5.1
       authorization: 
-      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>", oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<DROPBOX_APP_KEY>", oauth_token="<DROPBOX_ACCESS_TOKEN>", oauth_signature="<DROPBOX_APP_SECRET>&<DROPBOX_ACCESS_TOKEN_SECRET>"
   response: 
     status: 
       code: 200
@@ -1471,7 +1479,7 @@ http_interactions:
       server: 
       - nginx/1.2.3
       date: 
-      - Tue, 06 Nov 2012 21:08:54 GMT
+      - Fri, 23 Nov 2012 03:05:23 GMT
       content-type: 
       - text/javascript
       transfer-encoding: 
@@ -1490,9 +1498,9 @@ http_interactions:
       - "*"
     body: 
       encoding: US-ASCII
-      string: "{\"url\": \"https://dl.dropbox.com/0/view/dktyq4xy4czb71s/Public/photo.jpg\", \"expires\": \"Wed, 07 Nov 2012 01:08:54 +0000\"}"
+      string: "{\"revision\": 1630, \"rev\": \"65e0b59ac45\", \"thumb_exists\": true, \"bytes\": 61570, \"modified\": \"Fri, 23 Nov 2012 03:05:22 +0000\", \"client_mtime\": \"Fri, 23 Nov 2012 03:05:22 +0000\", \"path\": \"/Public/photo.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"60.1 KB\"}"
     http_version: "1.1"
-  recorded_at: Tue, 06 Nov 2012 21:08:54 GMT
+  recorded_at: Fri, 23 Nov 2012 03:05:23 GMT
 - request: 
     method: post
     uri: https://api.dropbox.com/1/fileops/delete?root=dropbox&path=%2FPublic%2Fphoto.jpg
@@ -1505,7 +1513,7 @@ http_interactions:
       user-agent: 
       - OfficialDropboxRubySDK/1.5.1
       authorization: 
-      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>", oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<DROPBOX_APP_KEY>", oauth_token="<DROPBOX_ACCESS_TOKEN>", oauth_signature="<DROPBOX_APP_SECRET>&<DROPBOX_ACCESS_TOKEN_SECRET>"
   response: 
     status: 
       code: 200
@@ -1514,7 +1522,7 @@ http_interactions:
       server: 
       - nginx/1.2.3
       date: 
-      - Tue, 06 Nov 2012 21:08:55 GMT
+      - Fri, 23 Nov 2012 03:05:25 GMT
       content-type: 
       - text/javascript
       transfer-encoding: 
@@ -1524,7 +1532,7 @@ http_interactions:
       access-control-expose-headers: 
       - X-Dropbox-Metadata
       set-cookie: 
-      - gvc=MTQ3NzkwNTQ3NjQzNjc0MjQzNzUyMTI4NzUwMDY0MTY2OTU5MTQw; expires=Sun, 05-Nov-2017 21:08:55 GMT; Path=/; httponly
+      - gvc=MjkxNjM5NDI5MDk5MTUwODkyNTEzNjE1Njc1NDg2NjI2NTE5Mjg%3D; expires=Wed, 22-Nov-2017 03:05:24 GMT; Path=/; httponly
       pragma: 
       - no-cache
       cache-control: 
@@ -1535,12 +1543,12 @@ http_interactions:
       - "*"
     body: 
       encoding: US-ASCII
-      string: "{\"is_deleted\": true, \"revision\": 470, \"rev\": \"1d60b59ac45\", \"thumb_exists\": true, \"bytes\": 0, \"modified\": \"Tue, 06 Nov 2012 21:08:54 +0000\", \"client_mtime\": \"Wed, 31 Dec 1969 23:59:59 +0000\", \"path\": \"/Public/photo.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"0 bytes\"}"
+      string: "{\"is_deleted\": true, \"revision\": 1631, \"rev\": \"65f0b59ac45\", \"thumb_exists\": true, \"bytes\": 0, \"modified\": \"Fri, 23 Nov 2012 03:05:24 +0000\", \"client_mtime\": \"Wed, 31 Dec 1969 23:59:59 +0000\", \"path\": \"/Public/photo.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"0 bytes\"}"
     http_version: "1.1"
-  recorded_at: Tue, 06 Nov 2012 21:08:55 GMT
+  recorded_at: Fri, 23 Nov 2012 03:05:25 GMT
 - request: 
     method: get
-    uri: https://api.dropbox.com/1/media/dropbox/Public/photo.jpg
+    uri: https://api.dropbox.com/1/metadata/dropbox/Public/photo.jpg?file_limit=25000&list=true&include_deleted=false
     body: 
       encoding: US-ASCII
       string: ""
@@ -1550,29 +1558,37 @@ http_interactions:
       user-agent: 
       - OfficialDropboxRubySDK/1.5.1
       authorization: 
-      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>", oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<DROPBOX_APP_KEY>", oauth_token="<DROPBOX_ACCESS_TOKEN>", oauth_signature="<DROPBOX_APP_SECRET>&<DROPBOX_ACCESS_TOKEN_SECRET>"
   response: 
     status: 
-      code: 404
-      message: Not Found
+      code: 200
+      message: OK
     headers: 
       server: 
       - nginx/1.2.3
       date: 
-      - Tue, 06 Nov 2012 21:08:55 GMT
+      - Fri, 23 Nov 2012 03:05:26 GMT
       content-type: 
-      - application/json
+      - text/javascript
       transfer-encoding: 
       - chunked
       connection: 
       - close
+      access-control-expose-headers: 
+      - X-Dropbox-Metadata
+      pragma: 
+      - no-cache
+      cache-control: 
+      - no-cache
+      x-frame-options: 
+      - SAMEORIGIN
       access-control-allow-origin: 
       - "*"
     body: 
       encoding: US-ASCII
-      string: "{\"error\": \"Path '/Public/photo.jpg' not found\"}"
+      string: "{\"is_deleted\": true, \"revision\": 1631, \"rev\": \"65f0b59ac45\", \"thumb_exists\": true, \"bytes\": 0, \"modified\": \"Fri, 23 Nov 2012 03:05:24 +0000\", \"client_mtime\": \"Wed, 31 Dec 1969 23:59:59 +0000\", \"path\": \"/Public/photo.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"0 bytes\"}"
     http_version: "1.1"
-  recorded_at: Tue, 06 Nov 2012 21:08:55 GMT
+  recorded_at: Fri, 23 Nov 2012 03:05:26 GMT
 - request: 
     method: put
     uri: https://api-content.dropbox.com/1/files_put/dropbox/Public/photo.jpg?overwrite=false
@@ -2959,7 +2975,7 @@ http_interactions:
       content-length: 
       - 61570
       authorization: 
-      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>", oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<DROPBOX_APP_KEY>", oauth_token="<DROPBOX_ACCESS_TOKEN>", oauth_signature="<DROPBOX_APP_SECRET>&<DROPBOX_ACCESS_TOKEN_SECRET>"
   response: 
     status: 
       code: 200
@@ -2968,7 +2984,7 @@ http_interactions:
       server: 
       - nginx/1.2.3
       date: 
-      - Tue, 06 Nov 2012 21:08:56 GMT
+      - Fri, 23 Nov 2012 03:05:27 GMT
       content-type: 
       - text/javascript
       transfer-encoding: 
@@ -2985,12 +3001,12 @@ http_interactions:
       - no-cache
     body: 
       encoding: US-ASCII
-      string: "{\"revision\": 471, \"rev\": \"1d70b59ac45\", \"thumb_exists\": true, \"bytes\": 61570, \"modified\": \"Tue, 06 Nov 2012 21:08:56 +0000\", \"client_mtime\": \"Tue, 06 Nov 2012 21:08:56 +0000\", \"path\": \"/Public/photo.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"60.1 KB\"}"
+      string: "{\"revision\": 1632, \"rev\": \"6600b59ac45\", \"thumb_exists\": true, \"bytes\": 61570, \"modified\": \"Fri, 23 Nov 2012 03:05:27 +0000\", \"client_mtime\": \"Fri, 23 Nov 2012 03:05:27 +0000\", \"path\": \"/Public/photo.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"60.1 KB\"}"
     http_version: "1.1"
-  recorded_at: Tue, 06 Nov 2012 21:08:56 GMT
+  recorded_at: Fri, 23 Nov 2012 03:05:27 GMT
 - request: 
     method: get
-    uri: https://api.dropbox.com/1/media/dropbox/Public/photo.jpg
+    uri: https://api.dropbox.com/1/metadata/dropbox/Public/photo.jpg?file_limit=25000&list=true&include_deleted=false
     body: 
       encoding: US-ASCII
       string: ""
@@ -3000,7 +3016,7 @@ http_interactions:
       user-agent: 
       - OfficialDropboxRubySDK/1.5.1
       authorization: 
-      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>", oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<DROPBOX_APP_KEY>", oauth_token="<DROPBOX_ACCESS_TOKEN>", oauth_signature="<DROPBOX_APP_SECRET>&<DROPBOX_ACCESS_TOKEN_SECRET>"
   response: 
     status: 
       code: 200
@@ -3009,7 +3025,7 @@ http_interactions:
       server: 
       - nginx/1.2.3
       date: 
-      - Tue, 06 Nov 2012 21:08:57 GMT
+      - Fri, 23 Nov 2012 03:05:28 GMT
       content-type: 
       - text/javascript
       transfer-encoding: 
@@ -3028,9 +3044,9 @@ http_interactions:
       - "*"
     body: 
       encoding: US-ASCII
-      string: "{\"url\": \"https://dl.dropbox.com/0/view/dktyq4xy4czb71s/Public/photo.jpg\", \"expires\": \"Wed, 07 Nov 2012 01:08:57 +0000\"}"
+      string: "{\"revision\": 1632, \"rev\": \"6600b59ac45\", \"thumb_exists\": true, \"bytes\": 61570, \"modified\": \"Fri, 23 Nov 2012 03:05:27 +0000\", \"client_mtime\": \"Fri, 23 Nov 2012 03:05:27 +0000\", \"path\": \"/Public/photo.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"60.1 KB\"}"
     http_version: "1.1"
-  recorded_at: Tue, 06 Nov 2012 21:08:57 GMT
+  recorded_at: Fri, 23 Nov 2012 03:05:28 GMT
 - request: 
     method: post
     uri: https://api.dropbox.com/1/fileops/delete?root=dropbox&path=%2FPublic%2Fphoto.jpg
@@ -3043,7 +3059,7 @@ http_interactions:
       user-agent: 
       - OfficialDropboxRubySDK/1.5.1
       authorization: 
-      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>", oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<DROPBOX_APP_KEY>", oauth_token="<DROPBOX_ACCESS_TOKEN>", oauth_signature="<DROPBOX_APP_SECRET>&<DROPBOX_ACCESS_TOKEN_SECRET>"
   response: 
     status: 
       code: 200
@@ -3052,7 +3068,7 @@ http_interactions:
       server: 
       - nginx/1.2.3
       date: 
-      - Tue, 06 Nov 2012 21:08:58 GMT
+      - Fri, 23 Nov 2012 03:05:29 GMT
       content-type: 
       - text/javascript
       transfer-encoding: 
@@ -3062,7 +3078,7 @@ http_interactions:
       access-control-expose-headers: 
       - X-Dropbox-Metadata
       set-cookie: 
-      - gvc=MjU2NDAwMTQxMTM5ODg0ODEzNTEzMzgwOTcyNjI5NTI5NDY4MjY3; expires=Sun, 05-Nov-2017 21:08:57 GMT; Path=/; httponly
+      - gvc=MjI4MjQyNzg0MDMyMzI2OTc0Nzc3MTk2MDI5MzA1OTE1OTQxMzQ1; expires=Wed, 22-Nov-2017 03:05:29 GMT; Path=/; httponly
       pragma: 
       - no-cache
       cache-control: 
@@ -3073,12 +3089,12 @@ http_interactions:
       - "*"
     body: 
       encoding: US-ASCII
-      string: "{\"is_deleted\": true, \"revision\": 472, \"rev\": \"1d80b59ac45\", \"thumb_exists\": true, \"bytes\": 0, \"modified\": \"Tue, 06 Nov 2012 21:08:57 +0000\", \"client_mtime\": \"Wed, 31 Dec 1969 23:59:59 +0000\", \"path\": \"/Public/photo.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"0 bytes\"}"
+      string: "{\"is_deleted\": true, \"revision\": 1633, \"rev\": \"6610b59ac45\", \"thumb_exists\": true, \"bytes\": 0, \"modified\": \"Fri, 23 Nov 2012 03:05:29 +0000\", \"client_mtime\": \"Wed, 31 Dec 1969 23:59:59 +0000\", \"path\": \"/Public/photo.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"0 bytes\"}"
     http_version: "1.1"
-  recorded_at: Tue, 06 Nov 2012 21:08:58 GMT
+  recorded_at: Fri, 23 Nov 2012 03:05:29 GMT
 - request: 
     method: get
-    uri: https://api.dropbox.com/1/media/dropbox/Public/another_photo.jpg
+    uri: https://api.dropbox.com/1/metadata/dropbox/Public/another_photo.jpg?file_limit=25000&list=true&include_deleted=false
     body: 
       encoding: US-ASCII
       string: ""
@@ -3088,29 +3104,37 @@ http_interactions:
       user-agent: 
       - OfficialDropboxRubySDK/1.5.1
       authorization: 
-      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>", oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<DROPBOX_APP_KEY>", oauth_token="<DROPBOX_ACCESS_TOKEN>", oauth_signature="<DROPBOX_APP_SECRET>&<DROPBOX_ACCESS_TOKEN_SECRET>"
   response: 
     status: 
-      code: 404
-      message: Not Found
+      code: 200
+      message: OK
     headers: 
       server: 
       - nginx/1.2.3
       date: 
-      - Tue, 06 Nov 2012 21:08:58 GMT
+      - Fri, 23 Nov 2012 03:05:30 GMT
       content-type: 
-      - application/json
+      - text/javascript
       transfer-encoding: 
       - chunked
       connection: 
       - close
+      access-control-expose-headers: 
+      - X-Dropbox-Metadata
+      pragma: 
+      - no-cache
+      cache-control: 
+      - no-cache
+      x-frame-options: 
+      - SAMEORIGIN
       access-control-allow-origin: 
       - "*"
     body: 
       encoding: US-ASCII
-      string: "{\"error\": \"Path '/Public/another_photo.jpg' not found\"}"
+      string: "{\"is_deleted\": true, \"revision\": 1595, \"rev\": \"63b0b59ac45\", \"thumb_exists\": true, \"bytes\": 0, \"modified\": \"Fri, 23 Nov 2012 02:53:30 +0000\", \"client_mtime\": \"Wed, 31 Dec 1969 23:59:59 +0000\", \"path\": \"/Public/another_photo.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"0 bytes\"}"
     http_version: "1.1"
-  recorded_at: Tue, 06 Nov 2012 21:08:58 GMT
+  recorded_at: Fri, 23 Nov 2012 03:05:30 GMT
 - request: 
     method: put
     uri: https://api-content.dropbox.com/1/files_put/dropbox/Public/another_photo.jpg?overwrite=false
@@ -4497,7 +4521,7 @@ http_interactions:
       content-length: 
       - 61570
       authorization: 
-      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>", oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<DROPBOX_APP_KEY>", oauth_token="<DROPBOX_ACCESS_TOKEN>", oauth_signature="<DROPBOX_APP_SECRET>&<DROPBOX_ACCESS_TOKEN_SECRET>"
   response: 
     status: 
       code: 200
@@ -4506,7 +4530,7 @@ http_interactions:
       server: 
       - nginx/1.2.3
       date: 
-      - Tue, 06 Nov 2012 21:09:00 GMT
+      - Fri, 23 Nov 2012 03:05:31 GMT
       content-type: 
       - text/javascript
       transfer-encoding: 
@@ -4523,12 +4547,12 @@ http_interactions:
       - no-cache
     body: 
       encoding: US-ASCII
-      string: "{\"revision\": 473, \"rev\": \"1d90b59ac45\", \"thumb_exists\": true, \"bytes\": 61570, \"modified\": \"Tue, 06 Nov 2012 21:08:59 +0000\", \"client_mtime\": \"Tue, 06 Nov 2012 21:08:59 +0000\", \"path\": \"/Public/another_photo.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"60.1 KB\"}"
+      string: "{\"revision\": 1634, \"rev\": \"6620b59ac45\", \"thumb_exists\": true, \"bytes\": 61570, \"modified\": \"Fri, 23 Nov 2012 03:05:31 +0000\", \"client_mtime\": \"Fri, 23 Nov 2012 03:05:31 +0000\", \"path\": \"/Public/another_photo.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"60.1 KB\"}"
     http_version: "1.1"
-  recorded_at: Tue, 06 Nov 2012 21:09:00 GMT
+  recorded_at: Fri, 23 Nov 2012 03:05:31 GMT
 - request: 
     method: get
-    uri: https://api.dropbox.com/1/media/dropbox/Public/photo.jpg
+    uri: https://api.dropbox.com/1/metadata/dropbox/Public/photo.jpg?file_limit=25000&list=true&include_deleted=false
     body: 
       encoding: US-ASCII
       string: ""
@@ -4538,42 +4562,7 @@ http_interactions:
       user-agent: 
       - OfficialDropboxRubySDK/1.5.1
       authorization: 
-      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>", oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
-  response: 
-    status: 
-      code: 404
-      message: Not Found
-    headers: 
-      server: 
-      - nginx/1.2.3
-      date: 
-      - Tue, 06 Nov 2012 21:09:00 GMT
-      content-type: 
-      - application/json
-      transfer-encoding: 
-      - chunked
-      connection: 
-      - close
-      access-control-allow-origin: 
-      - "*"
-    body: 
-      encoding: US-ASCII
-      string: "{\"error\": \"Path '/Public/photo.jpg' not found\"}"
-    http_version: "1.1"
-  recorded_at: Tue, 06 Nov 2012 21:09:00 GMT
-- request: 
-    method: get
-    uri: https://api.dropbox.com/1/media/dropbox/Public/another_photo.jpg
-    body: 
-      encoding: US-ASCII
-      string: ""
-    headers: 
-      accept: 
-      - "*/*"
-      user-agent: 
-      - OfficialDropboxRubySDK/1.5.1
-      authorization: 
-      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>", oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<DROPBOX_APP_KEY>", oauth_token="<DROPBOX_ACCESS_TOKEN>", oauth_signature="<DROPBOX_APP_SECRET>&<DROPBOX_ACCESS_TOKEN_SECRET>"
   response: 
     status: 
       code: 200
@@ -4582,7 +4571,7 @@ http_interactions:
       server: 
       - nginx/1.2.3
       date: 
-      - Tue, 06 Nov 2012 21:09:01 GMT
+      - Fri, 23 Nov 2012 03:05:32 GMT
       content-type: 
       - text/javascript
       transfer-encoding: 
@@ -4601,12 +4590,12 @@ http_interactions:
       - "*"
     body: 
       encoding: US-ASCII
-      string: "{\"url\": \"https://dl.dropbox.com/0/view/u4jha2jzffzc7g8/Public/another_photo.jpg\", \"expires\": \"Wed, 07 Nov 2012 01:09:01 +0000\"}"
+      string: "{\"is_deleted\": true, \"revision\": 1633, \"rev\": \"6610b59ac45\", \"thumb_exists\": true, \"bytes\": 0, \"modified\": \"Fri, 23 Nov 2012 03:05:29 +0000\", \"client_mtime\": \"Wed, 31 Dec 1969 23:59:59 +0000\", \"path\": \"/Public/photo.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"0 bytes\"}"
     http_version: "1.1"
-  recorded_at: Tue, 06 Nov 2012 21:09:01 GMT
+  recorded_at: Fri, 23 Nov 2012 03:05:32 GMT
 - request: 
     method: get
-    uri: https://api.dropbox.com/1/media/dropbox/Public/another_photo.jpg
+    uri: https://api.dropbox.com/1/metadata/dropbox/Public/another_photo.jpg?file_limit=25000&list=true&include_deleted=false
     body: 
       encoding: US-ASCII
       string: ""
@@ -4616,7 +4605,7 @@ http_interactions:
       user-agent: 
       - OfficialDropboxRubySDK/1.5.1
       authorization: 
-      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>", oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<DROPBOX_APP_KEY>", oauth_token="<DROPBOX_ACCESS_TOKEN>", oauth_signature="<DROPBOX_APP_SECRET>&<DROPBOX_ACCESS_TOKEN_SECRET>"
   response: 
     status: 
       code: 200
@@ -4625,7 +4614,7 @@ http_interactions:
       server: 
       - nginx/1.2.3
       date: 
-      - Tue, 06 Nov 2012 21:09:03 GMT
+      - Fri, 23 Nov 2012 03:05:33 GMT
       content-type: 
       - text/javascript
       transfer-encoding: 
@@ -4644,9 +4633,52 @@ http_interactions:
       - "*"
     body: 
       encoding: US-ASCII
-      string: "{\"url\": \"https://dl.dropbox.com/0/view/u4jha2jzffzc7g8/Public/another_photo.jpg\", \"expires\": \"Wed, 07 Nov 2012 01:09:03 +0000\"}"
+      string: "{\"revision\": 1634, \"rev\": \"6620b59ac45\", \"thumb_exists\": true, \"bytes\": 61570, \"modified\": \"Fri, 23 Nov 2012 03:05:31 +0000\", \"client_mtime\": \"Fri, 23 Nov 2012 03:05:31 +0000\", \"path\": \"/Public/another_photo.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"60.1 KB\"}"
     http_version: "1.1"
-  recorded_at: Tue, 06 Nov 2012 21:09:03 GMT
+  recorded_at: Fri, 23 Nov 2012 03:05:33 GMT
+- request: 
+    method: get
+    uri: https://api.dropbox.com/1/metadata/dropbox/Public/another_photo.jpg?file_limit=25000&list=true&include_deleted=false
+    body: 
+      encoding: US-ASCII
+      string: ""
+    headers: 
+      accept: 
+      - "*/*"
+      user-agent: 
+      - OfficialDropboxRubySDK/1.5.1
+      authorization: 
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<DROPBOX_APP_KEY>", oauth_token="<DROPBOX_ACCESS_TOKEN>", oauth_signature="<DROPBOX_APP_SECRET>&<DROPBOX_ACCESS_TOKEN_SECRET>"
+  response: 
+    status: 
+      code: 200
+      message: OK
+    headers: 
+      server: 
+      - nginx/1.2.3
+      date: 
+      - Fri, 23 Nov 2012 03:05:34 GMT
+      content-type: 
+      - text/javascript
+      transfer-encoding: 
+      - chunked
+      connection: 
+      - close
+      access-control-expose-headers: 
+      - X-Dropbox-Metadata
+      pragma: 
+      - no-cache
+      cache-control: 
+      - no-cache
+      x-frame-options: 
+      - SAMEORIGIN
+      access-control-allow-origin: 
+      - "*"
+    body: 
+      encoding: US-ASCII
+      string: "{\"revision\": 1634, \"rev\": \"6620b59ac45\", \"thumb_exists\": true, \"bytes\": 61570, \"modified\": \"Fri, 23 Nov 2012 03:05:31 +0000\", \"client_mtime\": \"Fri, 23 Nov 2012 03:05:31 +0000\", \"path\": \"/Public/another_photo.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"60.1 KB\"}"
+    http_version: "1.1"
+  recorded_at: Fri, 23 Nov 2012 03:05:34 GMT
 - request: 
     method: post
     uri: https://api.dropbox.com/1/fileops/delete?root=dropbox&path=%2FPublic%2Fanother_photo.jpg
@@ -4659,7 +4691,7 @@ http_interactions:
       user-agent: 
       - OfficialDropboxRubySDK/1.5.1
       authorization: 
-      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>", oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<DROPBOX_APP_KEY>", oauth_token="<DROPBOX_ACCESS_TOKEN>", oauth_signature="<DROPBOX_APP_SECRET>&<DROPBOX_ACCESS_TOKEN_SECRET>"
   response: 
     status: 
       code: 200
@@ -4668,7 +4700,7 @@ http_interactions:
       server: 
       - nginx/1.2.3
       date: 
-      - Tue, 06 Nov 2012 21:09:04 GMT
+      - Fri, 23 Nov 2012 03:05:35 GMT
       content-type: 
       - text/javascript
       transfer-encoding: 
@@ -4678,7 +4710,7 @@ http_interactions:
       access-control-expose-headers: 
       - X-Dropbox-Metadata
       set-cookie: 
-      - gvc=MzY5NDIzNDkzMTE0MjU2NjMxODczNzA5MzczNDQ0MDU0NDcyMTE%3D; expires=Sun, 05-Nov-2017 21:09:04 GMT; Path=/; httponly
+      - gvc=NTc3MjgyMjIyMTg1NTE4NDU4NTcwODkxMTcxNzYxMTg3OTEyMTg%3D; expires=Wed, 22-Nov-2017 03:05:35 GMT; Path=/; httponly
       pragma: 
       - no-cache
       cache-control: 
@@ -4689,7 +4721,7 @@ http_interactions:
       - "*"
     body: 
       encoding: US-ASCII
-      string: "{\"is_deleted\": true, \"revision\": 474, \"rev\": \"1da0b59ac45\", \"thumb_exists\": true, \"bytes\": 0, \"modified\": \"Tue, 06 Nov 2012 21:09:03 +0000\", \"client_mtime\": \"Wed, 31 Dec 1969 23:59:59 +0000\", \"path\": \"/Public/another_photo.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"0 bytes\"}"
+      string: "{\"is_deleted\": true, \"revision\": 1635, \"rev\": \"6630b59ac45\", \"thumb_exists\": true, \"bytes\": 0, \"modified\": \"Fri, 23 Nov 2012 03:05:35 +0000\", \"client_mtime\": \"Wed, 31 Dec 1969 23:59:59 +0000\", \"path\": \"/Public/another_photo.jpg\", \"is_dir\": false, \"icon\": \"page_white_picture\", \"root\": \"dropbox\", \"mime_type\": \"image/jpeg\", \"size\": \"0 bytes\"}"
     http_version: "1.1"
-  recorded_at: Tue, 06 Nov 2012 21:09:04 GMT
+  recorded_at: Fri, 23 Nov 2012 03:05:35 GMT
 recorded_with: VCR 2.3.0

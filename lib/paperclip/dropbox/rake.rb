@@ -13,7 +13,7 @@ module Paperclip
 
         assert_answer!
         session.get_access_token
-        dropbox_client = DropboxClient.new(session, "dropbox")
+        dropbox_client = DropboxClient.new(session)
         account_info = dropbox_client.account_info
 
         puts <<-MESSAGE

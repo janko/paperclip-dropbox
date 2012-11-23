@@ -37,7 +37,8 @@ module Paperclip
       end
 
       def exists?(style)
-        !!dropbox_client.media(path(style))
+        metadata = dropbox_metadata(style)
+        !metadata.nil? && !metadata['is_deleted']
       rescue DropboxError
         false
       end
@@ -48,12 +49,20 @@ module Paperclip
           options = args.last.is_a?(Hash) ? args.last : {}
           query = options[:download] ? "?dl=1" : ""
 
-          File.join("http://dl.dropbox.com/u/#{user_id}", path_for_url(style) + query)
+          if app_folder_mode
+            dropbox_client.media(path(style))['url'] + query
+          else
+            File.join("http://dl.dropbox.com/u/#{user_id}", path_for_url(style) + query)
+          end
         end
       end
 
       def path(style)
-        File.join("Public", path_for_url(style))
+        if app_folder_mode
+          path_for_url(style)
+        else
+          File.join("Public", path_for_url(style))
+        end
       end
 
       def path_for_url(style)
@@ -65,6 +74,10 @@ module Paperclip
         else
           path + style_suffix + original_extension.to_s
         end
+      end
+
+      def dropbox_metadata(style = default_style)
+        dropbox_client.metadata(path(style))
       end
 
       def copy_to_local_file(style, destination_path)
@@ -83,6 +96,10 @@ module Paperclip
         @dropbox_credentials[:user_id]
       end
 
+      def app_folder_mode
+        @dropbox_credentials[:access_level] == 'app_folder'
+      end
+
       def file_path
         return @dropbox_options[:path] if @dropbox_options[:path]
 
@@ -98,13 +115,18 @@ module Paperclip
           assert_required_keys
           session = DropboxSession.new(@dropbox_credentials[:app_key], @dropbox_credentials[:app_secret])
           session.set_access_token(@dropbox_credentials[:access_token], @dropbox_credentials[:access_token_secret])
-          DropboxClient.new(session, "dropbox")
+          DropboxClient.new(session, @dropbox_credentials[:access_level] || 'dropbox')
         end
       end
 
       def assert_required_keys
         [:app_key, :app_secret, :access_token, :access_token_secret, :user_id].each do |key|
           @dropbox_credentials.fetch(key)
+        end
+        if @dropbox_credentials[:access_level]
+          if not ['dropbox', 'app_folder'].include?(@dropbox_credentials[:access_level])
+            raise KeyError, ":access_level must be 'dropbox' or 'app_folder'"
+          end
         end
       end
 

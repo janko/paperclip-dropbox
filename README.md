@@ -1,6 +1,7 @@
 # Dropbox
 
-This gem extends [Paperclip](https://github.com/thoughtbot/paperclip) with Dropbox storage.
+This gem extends [Paperclip](https://github.com/thoughtbot/paperclip) with
+Dropbox storage.
 
 ## Installation
 
@@ -10,9 +11,59 @@ Put it in your `Gemfile`:
 gem "paperclip-dropbox"
 ```
 
-Ano run `bundle install`.
+And run `bundle install`.
 
-## Usage
+## Dropbox Setup
+
+You must [create a Dropbox app](https://www.dropbox.com/developers/apps) and
+authorize it to access the Dropbox account you want to use for storage. You have
+a choice of two access levels: **App folder** or **Full Dropbox**.
+
+### "Full Dropbox" access
+
+Files will be stored in the [Public folder](https://www.dropbox.com/help/16/en).
+Download URLs are predictable, valid forever, and don't require an API call to
+retrieve, but this may not be a good thing if you don't want your files to be
+easily accessed. When using one account to store data for multiple sites (e.g.
+staging and production instances), it's up to you to make sure they don't step
+on each other's toes.
+
+Note that accounts created after October 4, 2012 don't have the Public folder
+enabled by default: [Go here](https://www.dropbox.com/enable_public_folder) to
+enable it. If you get a message that the folder is deleted, just create a folder
+in the root named "Public", and it should gain the special icon.
+
+### "App folder" access
+
+Files will be stored in a subfolder under Apps (configurable in the app
+settings). Download URLs are generated on demand by calling the Dropbox API, and
+are only valid for 4 hours. This means your files are slightly "less public",
+and you can isolate data from multiple sites by creating multiple apps.
+
+**In app folder mode, every call to `#url` on an attachment will result in an
+HTTP request to Dropbox.** Whether or not this is acceptable will depend on what
+you're storing and how you're exposing it to users.
+
+### Authorizing your app
+
+After creating your app, it will have an "App key" and "App secret". Provide
+these to the authorization Rake task:
+
+```
+$ rake dropbox:authorize APP_KEY=your_app_key APP_SECRET=your_app_secret
+```
+
+It will output an authorization URL that you must visit to grant the app access.
+It will then output your access token, access token secret, and user ID.
+
+For non-Rails projects, you must require this task in your `Rakefile`:
+
+```ruby
+# Rakefile
+load "paperclip/dropbox/tasks.rake"
+```
+
+## Configuration
 
 Example:
 
@@ -25,20 +76,13 @@ class User < ActiveRecord::Base
 end
 ```
 
-Valid options for `#has_attached_file` are:
-
-- `:dropbox_credentials` – A Hash, a File, or a path to the file where your
-  Dropbox configuration is located
-
-- `:dropbox_options` – A Hash that accepts some Dropbox-specific options (they
-  are explained more below)
-
-## Configuration
-
 ### The `:dropbox_credentials` option
 
-It's best to put your Dropbox credentials into a `dropbox.yml`, and pass the path to
-that file to `:dropbox_credentials`. One example of that YAML file:
+This can be a hash or path to a YAML file containing the keys listed in the
+example below. These are obtained from your Dropbox app settings and the
+authorization Rake task.
+
+Example `config/dropbox.yml`:
 
 ```erb
 app_key: <%= ENV["DROPBOX_APP_KEY"] %>
@@ -46,105 +90,84 @@ app_secret: <%= ENV["DROPBOX_APP_SECRET"] %>
 access_token: <%= ENV["DROPBOX_ACCESS_TOKEN"] %>
 access_token_secret: <%= ENV["DROPBOX_ACCESS_TOKEN_SECRET"] %>
 user_id: <%= ENV["DROPBOX_USER_ID"] %>
+access_level: <%= ENV["DROPBOX_ACCESS_LEVEL"] %>
 ```
 
-This is a good practice; Don't put your credentials directly in your YAML file.
-Instead set them in system environment variables, and then embed them here through ERB.
+It is good practice to not include the credentials directly in the YAML file.
+Instead you can set them in environment variables and embed them with ERB. Note
+`access_level` must be either `"dropbox"` or `"app_folder"` depending on the
+access level of your app; see **Dropbox Setup** above.
 
-Note that all credentials mentioned here are required.
+If not using the ENV approach, this option can also be a hash of environments:
 
-If you don't have your app key and secret yet, go to your [Dropbox apps](https://www.dropbox.com/developers/apps),
-and create a new app there, which will then provide you your app key and secret.
-Note that your app has to have the **Full Dropbox** access level (not the "App folder").
-This is because the uploaded files have to be stored in your `Public` folder.
+```ruby
+:dropbox_credentials => {
+  :development => ...,
+  :production => ...
+}
+```
 
-If you're a relatively new Dropbox user, you'll have to enable your `Public` folder first by visiting
-[this link](https://www.dropbox.com/enable_public_folder).
-
-After you obtain your app key and secret, you can obtain the rest of the credentials
-through the `dropbox:authorize` rake task, which is described in more detail at the bottom of the readme.
-
-You can also namespace your credentials in `development`, `testing` and `production` environments
-(just like you do in your `database.yml`).
+In Rails apps, credentials will be auto-selected based on `Rails.env`. Otherwise
+they can be manually selected using the `:environment` option described below.
 
 ### The `:dropbox_options` option
 
-You can pass it 3 options:
+This is a hash containing any of the following options:
 
-- `:path` – A block, provides similar results as Paperclip's `:path` option
-- `:environment` – If you namespaced you credentials with environments, here you
-  can set your environment if you're in a non-Rails application
-- `:unique_filename` – Boolean
+- `:path` – Block, works similarly to Paperclip's `:path` option
+- `:unique_filename` – Boolean, whether to generate unique names for files in
+  the absence of a custom `:path`
+- `:environment` – String, the environment name to use for selecting namespaced
+  credentials in a non-Rails app
 
-The `:path` option works in this way; you give it a block, and the return value
-will be the path that the uploaded file will be saved to. The block yields attachment style,
-and is executed in the scope of the class' instance. For example, let's say you have
+The `:path` option should be a block that returns a path that the uploaded file
+should be saved to. The block yields the attachment style and is executed in the
+scope of the model instance. For example:
 
 ```ruby
 class User < ActiveRecord::Base
   has_attached_file :avatar,
     :storage => :dropbox,
-    :dropbox_credentials => "...",
+    :dropbox_credentials => "#{Rails.root}/config/dropbox.yml",
     :styles => { :medium => "300x300" },
     :dropbox_options => {
-      :path => proc { |style| "#{style}/#{id}_#{avatar.original_filename}"}
+      :path => proc { |style| "#{style}/#{id}_#{avatar.original_filename}" }
     }
 end
 ```
 
-Let's say now that a new user is created with the ID of `23`, and a `photo.jpg` as his
-avatar. The following files would be saved to the Dropbox:
+Let's say now that a new user is created with the ID of `23`, and a `photo.jpg`
+as his avatar. The following files would be saved to the Dropbox:
 
 ```
 Public/original/23_photo.jpg
 Public/medium/23_photo_medium.jpg
 ```
 
-The other file is called `photo_medium.jpg` because style names (other than `original`)
-will always be appended to the filenames, for better management.
+The other file is called `photo_medium.jpg` because style names (other than
+`original`) will always be appended to the filenames, for better management.
 
-Files in Dropbox inside a certain folder have to have **unique filenames**, otherwise exception
-`Paperclip::Storage::Dropbox::FileExists` is thrown. To help you with that, you
-can set
+Filenames within a Dropbox folder must be unique; uploading a file with a
+duplicate name will throw error `Paperclip::Storage::Dropbox::FileExists`. If
+you don't want to bother crafting your own unique filenames with the `:path`
+option, you can instead set the `:unique_filename` option to true and it will
+take care of that.
 
-```ruby
-# ...
-    :dropbox_options => {
-      :unique_filename => true
-    }
-```
+### URL options
 
-That will set `:path` to something that will be unique.
-
-You can also pass in the `:download` option to attachment's `#url`:
+When using `dropbox` access level, the `#url` method of attachments returns a
+URL to a "landing page" that provides a preview of the file and a download link.
+To make `#url` return a direct file download link, set the `:download` option as
+a parameter:
 
 ```ruby
 user.avatar.url(:download => true)
 ```
 
-And that will return a download URL for that attachment (so, if a user clicks to
-that link, the file will be downloaded, as opposed to being opened in the browser).
-
-### The `dropbox:authorize` rake task
-
-You just provide it your app key and secret:
-
-```
-$ rake dropbox:authorize APP_KEY=your_app_key APP_SECRET=your_app_secret
-```
-
-It will provide you an authorization URL which you have to visit, and after that
-it will output the rest of your credentials, which you just copy-paste wherever
-you need to.
-
-If you're in a non-Rails application, to get this rake task, you must require it in
-your `Rakefile`:
-
-```ruby
-# Rakefile
-load "paperclip/dropbox/tasks.rake"
-```
+When using `app_folder` access level, `#url` always returns a direct link, and
+setting the `:download` option simply forces the file to be downloaded even if
+the browser would normally just display it.
 
 ## License
 
-[MIT](https://github.com/janko-m/paperclip-dropbox/blob/master/LICENSE)
+[MIT License](https://github.com/janko-m/paperclip-dropbox/blob/master/LICENSE)

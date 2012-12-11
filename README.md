@@ -98,17 +98,16 @@ Instead you can set them in environment variables and embed them with ERB. Note
 `access_type` must be either `"dropbox"` or `"app_folder"` depending on the
 access type of your app; see **Dropbox Setup** above.
 
-If not using the ENV approach, this option can also be a hash of environments:
+You can also nest your credentials in environments (like in your `database.yml`):
 
-```ruby
-:dropbox_credentials => {
-  :development => ...,
-  :production => ...
-}
+```erb
+development:
+  app_key: "..."
+  ...
+production:
+  app_key: "..."
+  ...
 ```
-
-In Rails apps, credentials will be auto-selected based on `Rails.env`. Otherwise
-they can be manually selected using the `:environment` option described below.
 
 ### The `:dropbox_options` option
 

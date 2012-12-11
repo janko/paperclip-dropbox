@@ -8,13 +8,13 @@ require 'active_support/core_ext/hash/keys'
 RSPEC_DIR = File.expand_path(File.dirname(__FILE__))
 Dir[File.join(RSPEC_DIR, "support/**/*.rb")].each { |f| require f }
 
-CREDENTIAL_FILES = {
+CREDENTIALS_FILE = {
   dropbox: "#{RSPEC_DIR}/dropbox.yml",
   app_folder: "#{RSPEC_DIR}/app_folder.yml"
 }
 
-if CREDENTIAL_FILES.all? { |_, file| File.exists?(file) }
-  CREDENTIALS = Hash[CREDENTIAL_FILES.map do |key, file|
+if CREDENTIALS_FILE.all? { |_, file| File.exists?(file) }
+  CREDENTIALS = Hash[CREDENTIALS_FILE.map do |key, file|
     [key, YAML.load(ERB.new(File.read(file)).result).symbolize_keys]
   end]
 

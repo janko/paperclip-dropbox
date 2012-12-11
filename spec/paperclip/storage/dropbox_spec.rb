@@ -49,12 +49,12 @@ describe Paperclip::Storage::Dropbox, :vcr do
       end
 
       it "accepts a path to file" do
-        set_options(dropbox_credentials: CREDENTIAL_FILES[:dropbox])
+        set_options(dropbox_credentials: CREDENTIALS_FILE[:dropbox])
         expect { User.new.avatar }.to_not raise_error(KeyError)
       end
 
       it "accepts an open file" do
-        set_options(dropbox_credentials: File.open(CREDENTIAL_FILES[:dropbox]))
+        set_options(dropbox_credentials: File.open(CREDENTIALS_FILE[:dropbox]))
         expect { User.new.avatar }.to_not raise_error(KeyError)
       end
 
@@ -167,7 +167,7 @@ describe Paperclip::Storage::Dropbox, :vcr do
       stub_const("User", Class.new(ActiveRecord::Base) do
         has_attached_file :avatar,
           storage: :dropbox,
-          dropbox_credentials: CREDENTIAL_FILES[access_type],
+          dropbox_credentials: CREDENTIALS_FILE[access_type],
           styles: { medium: "300x300" }
       end)
     end
@@ -205,7 +205,7 @@ describe Paperclip::Storage::Dropbox, :vcr do
       stub_const("User", Class.new(ActiveRecord::Base) do
         has_attached_file :avatar,
           storage: :dropbox,
-          dropbox_credentials: CREDENTIAL_FILES[access_type]
+          dropbox_credentials: CREDENTIALS_FILE[access_type]
       end)
     end
 
@@ -231,7 +231,7 @@ describe Paperclip::Storage::Dropbox, :vcr do
       stub_const("User", Class.new(ActiveRecord::Base) do
         has_attached_file :avatar,
           storage: :dropbox,
-          dropbox_credentials: CREDENTIAL_FILES[:dropbox],
+          dropbox_credentials: CREDENTIALS_FILE[:dropbox],
           dropbox_options: options
       end)
     end

@@ -321,7 +321,7 @@ describe Paperclip::Storage::Dropbox, :vcr do
       end
 
       it "doesn't raise errors if there are no files to delete" do
-        @user.avatar.send(:dropbox_client).file_delete("Public/photo.jpg")
+        @user.avatar.dropbox_client.file_delete("Public/photo.jpg")
         expect { @user.destroy }.to_not raise_error
       end
     end

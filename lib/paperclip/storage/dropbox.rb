@@ -86,6 +86,15 @@ module Paperclip
         local_file.close
       end
 
+      def dropbox_client
+        @dropbox_client ||= begin
+          assert_required_keys
+          session = DropboxSession.new(@dropbox_credentials[:app_key], @dropbox_credentials[:app_secret])
+          session.set_access_token(@dropbox_credentials[:access_token], @dropbox_credentials[:access_token_secret])
+          DropboxClient.new(session, @dropbox_credentials[:access_type] || 'dropbox')
+        end
+      end
+
       private
 
       def original_extension
@@ -107,15 +116,6 @@ module Paperclip
           eval %(proc { |style| "\#{self.class.model_name.underscore}_\#{id}_\#{#{name}.name}" })
         else
           eval %(proc { |style| #{name}.original_filename })
-        end
-      end
-
-      def dropbox_client
-        @dropbox_client ||= begin
-          assert_required_keys
-          session = DropboxSession.new(@dropbox_credentials[:app_key], @dropbox_credentials[:app_secret])
-          session.set_access_token(@dropbox_credentials[:access_token], @dropbox_credentials[:access_token_secret])
-          DropboxClient.new(session, @dropbox_credentials[:access_type] || 'dropbox')
         end
       end
 

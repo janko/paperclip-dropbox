@@ -1,6 +1,6 @@
 RSpec::Matchers.define :be_stored_as do |path|
   match do |attachment|
-    metadata = attachment.send(:dropbox_client).metadata(path)
+    metadata = attachment.dropbox_client.metadata(path)
     !metadata.nil? && !metadata['is_deleted']
   end
 
@@ -16,7 +16,7 @@ end
 RSpec::Matchers.define :be_authenticated do
   match do |attachment|
     begin
-      attachment.send(:dropbox_client).account_info
+      attachment.dropbox_client.account_info
       true
     rescue
       false
@@ -25,7 +25,7 @@ RSpec::Matchers.define :be_authenticated do
 
   failure_message_for_should do |attachment|
     begin
-      attachment.send(:dropbox_client).account_info
+      attachment.dropbox_client.account_info
     rescue DropboxError => exception
       "expected #{attachment.name} to be authenticated, but exception \"#{exception}\" was raised"
     end

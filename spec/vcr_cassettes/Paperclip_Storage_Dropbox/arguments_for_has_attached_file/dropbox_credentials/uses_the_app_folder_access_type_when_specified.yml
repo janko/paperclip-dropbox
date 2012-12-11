@@ -1,0 +1,216 @@
+--- 
+http_interactions: 
+- request: 
+    method: get
+    uri: https://api.dropbox.com/1/metadata/sandbox/test_file?file_limit=25000&list=true&include_deleted=false
+    body: 
+      encoding: US-ASCII
+      string: ""
+    headers: 
+      accept: 
+      - "*/*"
+      user-agent: 
+      - OfficialDropboxRubySDK/1.5.1
+      authorization: 
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_FOLDER_APP_KEY>", oauth_token="<APP_FOLDER_ACCESS_TOKEN>", oauth_signature="<APP_FOLDER_APP_SECRET>&<APP_FOLDER_ACCESS_TOKEN_SECRET>"
+  response: 
+    status: 
+      code: 404
+      message: Not Found
+    headers: 
+      server: 
+      - nginx/1.2.3
+      date: 
+      - Tue, 11 Dec 2012 10:17:36 GMT
+      content-type: 
+      - application/json
+      transfer-encoding: 
+      - chunked
+      connection: 
+      - close
+      access-control-allow-origin: 
+      - "*"
+    body: 
+      encoding: US-ASCII
+      string: "{\"error\": \"Path '/test_file' not found\"}"
+    http_version: "1.1"
+  recorded_at: Tue, 11 Dec 2012 10:17:36 GMT
+- request: 
+    method: put
+    uri: https://api-content.dropbox.com/1/files_put/sandbox/test_file?overwrite=false
+    body: 
+      encoding: ASCII-8BIT
+      string: |
+        This is a test file.
+
+    headers: 
+      content-type: 
+      - application/octet-stream
+      accept: 
+      - "*/*"
+      user-agent: 
+      - OfficialDropboxRubySDK/1.5.1
+      content-length: 
+      - 21
+      authorization: 
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_FOLDER_APP_KEY>", oauth_token="<APP_FOLDER_ACCESS_TOKEN>", oauth_signature="<APP_FOLDER_APP_SECRET>&<APP_FOLDER_ACCESS_TOKEN_SECRET>"
+  response: 
+    status: 
+      code: 200
+      message: OK
+    headers: 
+      server: 
+      - nginx/1.2.3
+      date: 
+      - Tue, 11 Dec 2012 10:17:38 GMT
+      content-type: 
+      - text/javascript
+      transfer-encoding: 
+      - chunked
+      connection: 
+      - close
+      access-control-allow-origin: 
+      - "*"
+      access-control-expose-headers: 
+      - X-Dropbox-Metadata
+      pragma: 
+      - no-cache
+      cache-control: 
+      - no-cache
+    body: 
+      encoding: US-ASCII
+      string: "{\"revision\": 1, \"rev\": \"10c501cce\", \"thumb_exists\": false, \"bytes\": 21, \"modified\": \"Tue, 11 Dec 2012 10:17:38 +0000\", \"client_mtime\": \"Tue, 11 Dec 2012 10:17:38 +0000\", \"path\": \"/test_file\", \"is_dir\": false, \"icon\": \"page_white\", \"root\": \"app_folder\", \"mime_type\": \"application/octet-stream\", \"size\": \"21 bytes\"}"
+    http_version: "1.1"
+  recorded_at: Tue, 11 Dec 2012 10:17:38 GMT
+- request: 
+    method: get
+    uri: https://api.dropbox.com/1/metadata/sandbox/test_file?file_limit=25000&list=true&include_deleted=false
+    body: 
+      encoding: US-ASCII
+      string: ""
+    headers: 
+      accept: 
+      - "*/*"
+      user-agent: 
+      - OfficialDropboxRubySDK/1.5.1
+      authorization: 
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_FOLDER_APP_KEY>", oauth_token="<APP_FOLDER_ACCESS_TOKEN>", oauth_signature="<APP_FOLDER_APP_SECRET>&<APP_FOLDER_ACCESS_TOKEN_SECRET>"
+  response: 
+    status: 
+      code: 200
+      message: OK
+    headers: 
+      server: 
+      - nginx/1.2.3
+      date: 
+      - Tue, 11 Dec 2012 10:17:40 GMT
+      content-type: 
+      - text/javascript
+      transfer-encoding: 
+      - chunked
+      connection: 
+      - close
+      access-control-expose-headers: 
+      - X-Dropbox-Metadata
+      pragma: 
+      - no-cache
+      cache-control: 
+      - no-cache
+      x-frame-options: 
+      - SAMEORIGIN
+      access-control-allow-origin: 
+      - "*"
+    body: 
+      encoding: US-ASCII
+      string: "{\"revision\": 1, \"rev\": \"10c501cce\", \"thumb_exists\": false, \"bytes\": 21, \"modified\": \"Tue, 11 Dec 2012 10:17:38 +0000\", \"client_mtime\": \"Tue, 11 Dec 2012 10:17:38 +0000\", \"path\": \"/test_file\", \"is_dir\": false, \"icon\": \"page_white\", \"root\": \"app_folder\", \"mime_type\": \"application/octet-stream\", \"size\": \"21 bytes\"}"
+    http_version: "1.1"
+  recorded_at: Tue, 11 Dec 2012 10:17:40 GMT
+- request: 
+    method: get
+    uri: https://api.dropbox.com/1/metadata/sandbox/test_file?file_limit=25000&list=true&include_deleted=false
+    body: 
+      encoding: US-ASCII
+      string: ""
+    headers: 
+      accept: 
+      - "*/*"
+      user-agent: 
+      - OfficialDropboxRubySDK/1.5.1
+      authorization: 
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_FOLDER_APP_KEY>", oauth_token="<APP_FOLDER_ACCESS_TOKEN>", oauth_signature="<APP_FOLDER_APP_SECRET>&<APP_FOLDER_ACCESS_TOKEN_SECRET>"
+  response: 
+    status: 
+      code: 200
+      message: OK
+    headers: 
+      server: 
+      - nginx/1.2.3
+      date: 
+      - Tue, 11 Dec 2012 10:17:42 GMT
+      content-type: 
+      - text/javascript
+      transfer-encoding: 
+      - chunked
+      connection: 
+      - close
+      access-control-expose-headers: 
+      - X-Dropbox-Metadata
+      pragma: 
+      - no-cache
+      cache-control: 
+      - no-cache
+      x-frame-options: 
+      - SAMEORIGIN
+      access-control-allow-origin: 
+      - "*"
+    body: 
+      encoding: US-ASCII
+      string: "{\"revision\": 1, \"rev\": \"10c501cce\", \"thumb_exists\": false, \"bytes\": 21, \"modified\": \"Tue, 11 Dec 2012 10:17:38 +0000\", \"client_mtime\": \"Tue, 11 Dec 2012 10:17:38 +0000\", \"path\": \"/test_file\", \"is_dir\": false, \"icon\": \"page_white\", \"root\": \"app_folder\", \"mime_type\": \"application/octet-stream\", \"size\": \"21 bytes\"}"
+    http_version: "1.1"
+  recorded_at: Tue, 11 Dec 2012 10:17:42 GMT
+- request: 
+    method: post
+    uri: https://api.dropbox.com/1/fileops/delete?root=sandbox&path=%2Ftest_file
+    body: 
+      encoding: US-ASCII
+      string: ""
+    headers: 
+      accept: 
+      - "*/*"
+      user-agent: 
+      - OfficialDropboxRubySDK/1.5.1
+      authorization: 
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_FOLDER_APP_KEY>", oauth_token="<APP_FOLDER_ACCESS_TOKEN>", oauth_signature="<APP_FOLDER_APP_SECRET>&<APP_FOLDER_ACCESS_TOKEN_SECRET>"
+  response: 
+    status: 
+      code: 200
+      message: OK
+    headers: 
+      server: 
+      - nginx/1.2.3
+      date: 
+      - Tue, 11 Dec 2012 10:17:43 GMT
+      content-type: 
+      - text/javascript
+      transfer-encoding: 
+      - chunked
+      connection: 
+      - close
+      access-control-expose-headers: 
+      - X-Dropbox-Metadata
+      set-cookie: 
+      - gvc=MjcyMzY4MDcwNTI3NTcyNTY5NzUzNTI0NDkzMjc2MTM3NjI0NDA1; expires=Sun, 10-Dec-2017 10:17:43 GMT; Path=/; httponly
+      pragma: 
+      - no-cache
+      cache-control: 
+      - no-cache
+      x-frame-options: 
+      - SAMEORIGIN
+      access-control-allow-origin: 
+      - "*"
+    body: 
+      encoding: US-ASCII
+      string: "{\"is_deleted\": true, \"revision\": 2, \"rev\": \"20c501cce\", \"thumb_exists\": false, \"bytes\": 0, \"modified\": \"Tue, 11 Dec 2012 10:17:43 +0000\", \"client_mtime\": \"Wed, 31 Dec 1969 23:59:59 +0000\", \"path\": \"/test_file\", \"is_dir\": false, \"icon\": \"page_white\", \"root\": \"app_folder\", \"mime_type\": \"application/octet-stream\", \"size\": \"0 bytes\"}"
+    http_version: "1.1"
+  recorded_at: Tue, 11 Dec 2012 10:17:44 GMT
+recorded_with: VCR 2.2.4

@@ -18,8 +18,8 @@ if CREDENTIAL_FILES.all? { |_, file| File.exists?(file) }
     [key, YAML.load(ERB.new(File.read(file)).result).symbolize_keys]
   end]
 
-  if not CREDENTIALS.all? { |mode, keys| keys[:access_level].to_sym == mode }
-    puts error_message_wrong_access_levels
+  if not CREDENTIALS.all? { |mode, keys| keys[:access_type].to_sym == mode }
+    puts error_message_wrong_access_types
     exit
   end
 else
@@ -35,7 +35,7 @@ VCR.configure do |config|
   config.cassette_library_dir = 'spec/vcr_cassettes'
   config.hook_into :fakeweb
   CREDENTIALS.each do |mode, keys|
-    keys.except(:access_level).each do |key, value|
+    keys.except(:access_type).each do |key, value|
       config.filter_sensitive_data("<#{mode.to_s.upcase}_#{key.to_s.upcase}>") { value }
     end
   end

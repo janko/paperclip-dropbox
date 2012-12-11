@@ -77,25 +77,25 @@ describe Paperclip::Storage::Dropbox, :vcr do
         expect { User.new.avatar }.to raise_error(KeyError)
       end
 
-      it "uses the dropbox access level by default" do
-        set_options(dropbox_credentials: CREDENTIALS[:dropbox].except(:access_level))
+      it "uses the dropbox access type by default" do
+        set_options(dropbox_credentials: CREDENTIALS[:dropbox].except(:access_type))
         expect { User.create(avatar: uploaded_file("test_file")) }.to_not raise_error
       end
 
-      it "uses the dropbox access level when specified" do
+      it "uses the dropbox access type when specified" do
         set_options(dropbox_credentials: CREDENTIALS[:dropbox])
         user = User.create(avatar: uploaded_file("test_file"))
         user.avatar.dropbox_metadata['root'].should == 'dropbox'
       end
 
-      it "uses the app_folder access level when specified" do
+      it "uses the app_folder access type when specified" do
         set_options(dropbox_credentials: CREDENTIALS[:app_folder])
         user = User.create(avatar: uploaded_file("test_file"))
         user.avatar.dropbox_metadata['root'].should == 'app_folder'
       end
 
-      it "complains when given an invalid access level" do
-        set_options(dropbox_credentials: CREDENTIALS[:dropbox].merge(access_level: 'x'))
+      it "complains when given an invalid access type" do
+        set_options(dropbox_credentials: CREDENTIALS[:dropbox].merge(access_type: 'x'))
         expect { User.new.avatar }.to raise_error(KeyError)
       end
     end

@@ -97,7 +97,7 @@ module Paperclip
       end
 
       def app_folder_mode
-        @dropbox_credentials[:access_level] == 'app_folder'
+        @dropbox_credentials[:access_type] == 'app_folder'
       end
 
       def file_path
@@ -115,7 +115,7 @@ module Paperclip
           assert_required_keys
           session = DropboxSession.new(@dropbox_credentials[:app_key], @dropbox_credentials[:app_secret])
           session.set_access_token(@dropbox_credentials[:access_token], @dropbox_credentials[:access_token_secret])
-          DropboxClient.new(session, @dropbox_credentials[:access_level] || 'dropbox')
+          DropboxClient.new(session, @dropbox_credentials[:access_type] || 'dropbox')
         end
       end
 
@@ -123,10 +123,8 @@ module Paperclip
         [:app_key, :app_secret, :access_token, :access_token_secret, :user_id].each do |key|
           @dropbox_credentials.fetch(key)
         end
-        if @dropbox_credentials[:access_level]
-          if not ['dropbox', 'app_folder'].include?(@dropbox_credentials[:access_level])
-            raise KeyError, ":access_level must be 'dropbox' or 'app_folder'"
-          end
+        if @dropbox_credentials[:access_type] and not ['dropbox', 'app_folder'].include?(@dropbox_credentials[:access_type])
+          raise KeyError, ":access_type must be 'dropbox' or 'app_folder'"
         end
       end
 

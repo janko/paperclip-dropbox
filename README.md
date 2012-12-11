@@ -17,7 +17,7 @@ And run `bundle install`.
 
 You must [create a Dropbox app](https://www.dropbox.com/developers/apps) and
 authorize it to access the Dropbox account you want to use for storage. You have
-a choice of two access levels: **App folder** or **Full Dropbox**.
+a choice of two access types: **App folder** or **Full Dropbox**.
 
 ### "Full Dropbox" access
 
@@ -90,13 +90,13 @@ app_secret: <%= ENV["DROPBOX_APP_SECRET"] %>
 access_token: <%= ENV["DROPBOX_ACCESS_TOKEN"] %>
 access_token_secret: <%= ENV["DROPBOX_ACCESS_TOKEN_SECRET"] %>
 user_id: <%= ENV["DROPBOX_USER_ID"] %>
-access_level: <%= ENV["DROPBOX_ACCESS_LEVEL"] %>
+access_type: <%= ENV["DROPBOX_ACCESS_TYPE"] %>
 ```
 
 It is good practice to not include the credentials directly in the YAML file.
 Instead you can set them in environment variables and embed them with ERB. Note
-`access_level` must be either `"dropbox"` or `"app_folder"` depending on the
-access level of your app; see **Dropbox Setup** above.
+`access_type` must be either `"dropbox"` or `"app_folder"` depending on the
+access type of your app; see **Dropbox Setup** above.
 
 If not using the ENV approach, this option can also be a hash of environments:
 
@@ -155,7 +155,7 @@ take care of that.
 
 ### URL options
 
-When using `dropbox` access level, the `#url` method of attachments returns a
+When using `dropbox` access type, the `#url` method of attachments returns a
 URL to a "landing page" that provides a preview of the file and a download link.
 To make `#url` return a direct file download link, set the `:download` option as
 a parameter:
@@ -164,7 +164,7 @@ a parameter:
 user.avatar.url(:download => true)
 ```
 
-When using `app_folder` access level, `#url` always returns a direct link, and
+When using `app_folder` access type, `#url` always returns a direct link, and
 setting the `:download` option simply forces the file to be downloaded even if
 the browser would normally just display it.
 

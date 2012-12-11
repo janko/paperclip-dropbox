@@ -8,13 +8,13 @@ Copy the example files in spec/ and fill in your app credentials.
   EOS
 end
 
-def error_message_wrong_access_levels
+def error_message_wrong_access_types
   <<-EOS
 
 ### ERROR ###
-access_level must be "dropbox" in spec/dropbox.yml and "app_folder"
+:access_type must be "dropbox" in spec/dropbox.yml and "app_folder"
 in spec/app_folder.yml. Each must contain credentials for an app that
-has the corresponding access level.
+has the corresponding access type.
 
   EOS
 end

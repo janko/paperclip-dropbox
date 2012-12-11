@@ -47,10 +47,10 @@ you're storing and how you're exposing it to users.
 ### Authorizing your app
 
 After creating your app, it will have an "App key" and "App secret". Provide
-these to the authorization Rake task:
+these and the access type (`dropbox` or `app_folder`) to the authorization Rake task:
 
 ```
-$ rake dropbox:authorize APP_KEY=your_app_key APP_SECRET=your_app_secret
+$ rake dropbox:authorize APP_KEY=your_app_key APP_SECRET=your_app_secret ACCESS_TYPE=your_access_type
 ```
 
 It will output an authorization URL that you must visit to grant the app access.

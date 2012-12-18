@@ -168,13 +168,15 @@ describe Paperclip::Storage::Dropbox, :vcr do
         has_attached_file :avatar,
           storage: :dropbox,
           dropbox_credentials: CREDENTIALS_FILE[access_type],
-          styles: { medium: "300x300" }
+          styles: { medium: "300x300" },
+          default_url: "http://some-url.com"
       end)
     end
 
-    it "returns nil when the file doesn't exist" do
+    it "returns :default_url when the file doesn't exist" do
       set_access_type(:dropbox)
-      User.new.avatar.url.should be_nil
+      User.new.avatar.url.should eq "http://some-url.com"
+      User.new.avatar.url(:medium).should eq "http://some-url.com"
     end
 
     it "returns the default style when no style is provided" do

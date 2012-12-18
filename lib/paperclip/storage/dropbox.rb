@@ -54,6 +54,8 @@ module Paperclip
           else
             File.join("http://dl.dropbox.com/u/#{user_id}", path_for_url(style) + query)
           end
+        else
+          @options[:default_url]
         end
       end
 

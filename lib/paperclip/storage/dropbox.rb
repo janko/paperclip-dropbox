@@ -1,6 +1,7 @@
 require 'dropbox_sdk'
 require 'active_support/core_ext/hash/keys'
 require 'active_support/inflector/methods'
+require 'active_support/core_ext/object/blank'
 require 'yaml'
 require 'erb'
 
@@ -71,7 +72,7 @@ module Paperclip
         path = instance.instance_exec(style, &file_path)
         style_suffix = (style != default_style ? "_#{style}" : "")
 
-        if original_extension && path =~ /#{original_extension}$/
+        if original_extension.present? && path =~ /#{original_extension}$/
           path.sub(original_extension, "#{style_suffix}#{original_extension}")
         else
           path + style_suffix + original_extension.to_s
@@ -100,7 +101,7 @@ module Paperclip
       private
 
       def original_extension
-        original_filename[/\.[^.]+$/]
+        File.extname(original_filename)
       end
 
       def user_id

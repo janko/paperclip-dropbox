@@ -124,7 +124,8 @@ module Paperclip
 
       def assert_required_keys
         [:app_key, :app_secret, :access_token, :access_token_secret, :user_id].each do |key|
-          @dropbox_credentials.fetch(key)
+          value = @dropbox_credentials.fetch(key)
+          raise ":#{key} credential is nil" if value.nil?
         end
         if @dropbox_credentials[:access_type] and not ['dropbox', 'app_folder'].include?(@dropbox_credentials[:access_type])
           raise KeyError, ":access_type must be 'dropbox' or 'app_folder'"

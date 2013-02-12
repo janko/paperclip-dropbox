@@ -48,6 +48,11 @@ describe Paperclip::Storage::Dropbox, :vcr do
         expect { User.new.avatar }.to raise_error(KeyError)
       end
 
+      it "complains when any credential is nil" do
+        set_options(dropbox_credentials: {app_key: "foo", app_secret: "foo", access_token: nil, access_token_secret: "foo", user_id: "foo"})
+        expect { User.new.avatar }.to raise_error
+      end
+
       it "accepts a path to file" do
         set_options(dropbox_credentials: CREDENTIALS_FILE[:dropbox])
         expect { User.new.avatar }.to_not raise_error(KeyError)

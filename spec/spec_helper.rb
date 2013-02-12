@@ -5,6 +5,8 @@ require 'rest_client'
 require 'active_support/core_ext/hash/except'
 require 'active_support/core_ext/hash/keys'
 
+require "bundler/setup"
+
 RSPEC_DIR = File.expand_path(File.dirname(__FILE__))
 Dir[File.join(RSPEC_DIR, "support/**/*.rb")].each { |f| require f }
 

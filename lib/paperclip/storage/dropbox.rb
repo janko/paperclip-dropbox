@@ -45,8 +45,8 @@ module Paperclip
       end
 
       def url(*args)
+        style = args.first.is_a?(Symbol) ? args.first : default_style
         if present?
-          style = args.first.is_a?(Symbol) ? args.first : default_style
           options = args.last.is_a?(Hash) ? args.last : {}
           query = options[:download] ? "?dl=1" : ""
 
@@ -56,7 +56,7 @@ module Paperclip
             File.join("http://dl.dropbox.com/u/#{user_id}", path_for_url(style) + query)
           end
         else
-          @options[:default_url]
+          @options[:interpolator].interpolate(@options[:default_url],nil,style)
         end
       end
 

@@ -1,9 +1,8 @@
 .bundle
 Gemfile.lock
-doc/
 pkg/
-tmp
+tmp/
 .rspec
-*.DS_Store
 spec/dropbox.yml
 spec/app_folder.yml
+wiki/

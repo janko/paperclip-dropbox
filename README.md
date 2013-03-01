@@ -1,50 +1,20 @@
 # Dropbox
 
 This gem extends [Paperclip](https://github.com/thoughtbot/paperclip) with
-Dropbox storage.
+[Dropbox](https://www.dropbox.com) storage.
 
 ## Installation
 
-Put it in your `Gemfile`:
-
-```ruby
-gem "paperclip-dropbox"
+```sh
+$ gem install paperclip-dropbox
 ```
-
-And run `bundle install`.
 
 ## Dropbox Setup
 
 You must [create a Dropbox app](https://www.dropbox.com/developers/apps) and
 authorize it to access the Dropbox account you want to use for storage. You have
-a choice of two access types: **App folder** or **Full Dropbox**.
-
-### "Full Dropbox" access
-
-Files will be stored in the [Public folder](https://www.dropbox.com/help/16/en).
-Download URLs are predictable, valid forever, and don't require an API call to
-retrieve, but this may not be a good thing if you don't want your files to be
-easily accessed. When using one account to store data for multiple sites (e.g.
-staging and production instances), it's up to you to make sure they don't step
-on each other's toes.
-
-Note that accounts created after October 4, 2012 don't have the Public folder
-enabled by default: [Go here](https://www.dropbox.com/enable_public_folder) to
-enable it. If you get a message that the folder is deleted, just create a folder
-in the root named "Public", and it should gain the special icon.
-
-### "App folder" access
-
-Files will be stored in a subfolder under Apps (configurable in the app
-settings). Download URLs are generated on demand by calling the Dropbox API, and
-are only valid for 4 hours. This means your files are slightly "less public",
-and you can isolate data from multiple sites by creating multiple apps.
-
-**In app folder mode, every call to `#url` on an attachment will result in an
-HTTP request to Dropbox.** Whether or not this is acceptable will depend on what
-you're storing and how you're exposing it to users.
-
-### Authorizing your app
+a choice of two access types: **App folder** or **Full Dropbox**. You can read
+about the differences in [this wiki](https://github.com/janko-m/paperclip-dropbox/wiki/Access-types).
 
 After creating your app, it will have an "App key" and "App secret". Provide
 these and the access type (`dropbox` or `app_folder`) to the authorization Rake task:
@@ -53,8 +23,8 @@ these and the access type (`dropbox` or `app_folder`) to the authorization Rake 
 $ rake dropbox:authorize APP_KEY=your_app_key APP_SECRET=your_app_secret ACCESS_TYPE=your_access_type
 ```
 
-It will output an authorization URL that you must visit to grant the app access.
-It will then output your access token, access token secret, and user ID.
+First it will give you an authorization URL that you must visit to grant the app access.
+Then it will output your **access token**, and **user ID**.
 
 For non-Rails projects, you must require this task in your `Rakefile`:
 
@@ -169,4 +139,4 @@ the browser would normally just display it.
 
 ## License
 
-[MIT License](https://github.com/janko-m/paperclip-dropbox/blob/master/LICENSE)
+[MIT License](LICENSE)

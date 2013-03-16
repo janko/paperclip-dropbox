@@ -54,23 +54,22 @@ authorization Rake task.
 
 Example `config/dropbox.yml`:
 
-```erb
-app_key: <%= ENV["DROPBOX_APP_KEY"] %>
-app_secret: <%= ENV["DROPBOX_APP_SECRET"] %>
-access_token: <%= ENV["DROPBOX_ACCESS_TOKEN"] %>
-access_token_secret: <%= ENV["DROPBOX_ACCESS_TOKEN_SECRET"] %>
-user_id: <%= ENV["DROPBOX_USER_ID"] %>
-access_type: <%= ENV["DROPBOX_ACCESS_TYPE"] %>
+```yaml
+app_key: "APP_KEY"
+app_secret: "APP_SECRET"
+access_token: "ACCESS_TOKEN"
+access_token_secret: "ACCESS_TOKEN_SECRET"
+user_id: "USER_ID"
+access_type: "ACCESS_TYPE"
 ```
 
-It is good practice to not include the credentials directly in the YAML file.
-Instead you can set them in environment variables and embed them with ERB. Note
-`access_type` must be either `"dropbox"` or `"app_folder"` depending on the
-access type of your app; see **Dropbox Setup** above.
+Of course, replace these strings with real values. The `"ACCESS_TYPE"`
+must be either `"dropbox"` or `"app_folder"` depending on the access
+type of your app; see **Dropbox Setup** above.
 
 You can also nest your credentials in environments (like in your `database.yml`):
 
-```erb
+```yaml
 development:
   app_key: "..."
   ...

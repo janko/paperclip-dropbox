@@ -65,7 +65,13 @@ access_type: "ACCESS_TYPE"
 
 Of course, replace these strings with real values. The `"ACCESS_TYPE"`
 must be either `"dropbox"` or `"app_folder"` depending on the access
-type of your app; see **Dropbox Setup** above.
+type of your app; see **Dropbox Setup** above. If you're keeping your
+credentials in environment variables (or something similar), you can also use
+ERB:
+
+```erb
+app_key: <%= ENV["DROPBOX_APP_KEY"] %>
+```
 
 You can also nest your credentials in environments (like in your `database.yml`):
 

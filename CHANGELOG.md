@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.1.3
+
+- In Attachment#exists? made the `style` argument optional.
+
 ## Version 1.1.2
 
 - An error is now raised when any of the credentials are `nil`.

@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |gem|
   gem.name          = "paperclip-dropbox"
-  gem.version       = "1.1.2"
+  gem.version       = "1.1.3"
   gem.platform      = Gem::Platform::RUBY
 
   gem.homepage      = "https://github.com/janko-m/paperclip-dropbox"

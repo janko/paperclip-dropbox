@@ -142,6 +142,15 @@ When using `app_folder` access type, `#url` always returns a direct link, and
 setting the `:download` option simply forces the file to be downloaded even if
 the browser would normally just display it.
 
+### Check if the file exists
+
+You can easily check if the file exists on Dropbox:
+
+```ruby
+user.avatar.exists?
+# user.avatar.exists?(style)
+```
+
 ## License
 
 [MIT License](LICENSE)

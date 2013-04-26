@@ -37,7 +37,7 @@ module Paperclip
         @queued_for_delete = []
       end
 
-      def exists?(style)
+      def exists?(style = default_style)
         metadata = dropbox_metadata(style)
         !metadata.nil? && !metadata['is_deleted']
       rescue DropboxError

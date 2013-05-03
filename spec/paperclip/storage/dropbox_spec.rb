@@ -205,6 +205,30 @@ describe Paperclip::Storage::Dropbox, :vcr do
         end
       end
     end
+    context "interpolated default url if it has no attachment  " do
+      def set_access_type(access_type)
+        stub_const("User", Class.new(ActiveRecord::Base) do
+          has_attached_file :avatar,
+            storage: :dropbox,
+            dropbox_credentials: CREDENTIALS_FILE[access_type],
+            styles: { medium: "300x300" },
+            default_url: ":style/missing.gif"
+        end)
+      end
+
+      it "returns url based on style if style not mentioned" do
+        set_access_type(:dropbox)
+        @user = User.create()
+        @user.avatar.url.should == "original/missing.gif"
+      end
+
+      it "returns url based on style mentioned" do
+        set_access_type(:dropbox)
+        @user = User.create()
+        @user.avatar.url(:medium).should == "medium/missing.gif"
+      end
+      
+    end
   end
 
   describe "#path" do

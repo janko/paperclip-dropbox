@@ -6,3 +6,4 @@ tmp/
 spec/dropbox.yml
 spec/app_folder.yml
 wiki/
+.ruby-version

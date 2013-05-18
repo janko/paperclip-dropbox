@@ -1,9 +1,10 @@
-require 'dropbox_sdk'
-require 'active_support/core_ext/hash/keys'
-require 'active_support/inflector/methods'
-require 'active_support/core_ext/object/blank'
-require 'yaml'
-require 'erb'
+require "dropbox_sdk"
+require "yaml"
+require "erb"
+require "active_support/core_ext/hash/keys"
+require "active_support/inflector/methods"
+require "active_support/core_ext/object/blank"
+require "active_support/core_ext/array/extract_options"
 
 module Paperclip
   module Storage
@@ -46,29 +47,29 @@ module Paperclip
 
       def url(*args)
         if present?
-          style = args.first.is_a?(Symbol) ? args.first : default_style
-          options = args.last.is_a?(Hash) ? args.last : {}
+          options = args.extract_options!
+          style = args.first || default_style
           query = options[:download] ? "?dl=1" : ""
 
-          if app_folder_mode
-            dropbox_client.media(path(style))['url'] + query
+          if app_folder?
+            dropbox_client.media(path(style))["url"] + query
           else
-            File.join("http://dl.dropbox.com/u/#{user_id}", path_for_url(style) + query)
+            File.join("https://dl.dropboxusercontent.com/u/#{user_id}", path_for_url(style) + query)
           end
         else
           @options[:default_url]
         end
       end
 
-      def path(style)
-        if app_folder_mode
+      def path(style = default_style)
+        if app_folder?
           path_for_url(style)
         else
           File.join("Public", path_for_url(style))
         end
       end
 
-      def path_for_url(style)
+      def path_for_url(style = default_style)
         path = instance.instance_exec(style, &file_path)
         style_suffix = (style != default_style ? "_#{style}" : "")
 
@@ -108,9 +109,8 @@ module Paperclip
         @dropbox_credentials[:user_id]
       end
 
-      def app_folder_mode
-        @dropbox_credentials[:access_type] == 'app_folder'
-      end
+      def app_folder?; @dropbox_credentials[:access_type] == "app_folder" end
+      def dropbox?;    @dropbox_credentials[:access_type] == "dropbox"    end
 
       def file_path
         return @dropbox_options[:path] if @dropbox_options[:path]
@@ -123,13 +123,17 @@ module Paperclip
       end
 
       def assert_required_keys
-        [:app_key, :app_secret, :access_token, :access_token_secret, :user_id].each do |key|
+        keys.each do |key|
           value = @dropbox_credentials.fetch(key)
           raise ":#{key} credential is nil" if value.nil?
         end
-        if @dropbox_credentials[:access_type] and not ['dropbox', 'app_folder'].include?(@dropbox_credentials[:access_type])
-          raise KeyError, ":access_type must be 'dropbox' or 'app_folder'"
+        if @dropbox_credentials[:access_type] and not %w[dropbox app_folder].include?(@dropbox_credentials[:access_type])
+          raise KeyError, ":access_type must be either \"dropbox\" or \"app_folder\" (was \"#{@dropbox_credentials[:access_type]}\")"
         end
+      end
+
+      def keys
+        [:app_key, :app_secret, :access_token, :access_token_secret, :user_id]
       end
 
       def parse_credentials(credentials)
@@ -142,7 +146,7 @@ module Paperclip
           when Hash
             credentials
           else
-            raise ArgumentError, ":dropbox_credentials are not a path, file, nor a hash"
+            raise ArgumentError, ":dropbox_credentials is not a path, file, nor a hash"
           end
 
         result.stringify_keys

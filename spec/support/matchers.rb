@@ -3,14 +3,6 @@ RSpec::Matchers.define :be_stored_as do |path|
     metadata = attachment.dropbox_client.metadata(path)
     !metadata.nil? && !metadata['is_deleted']
   end
-
-  failure_message_for_should do |attachment|
-    "expected file to exist at Dropbox path \"#{path}\""
-  end
-
-  failure_message_for_should_not do |attachment|
-    "expected no file to exist at Dropbox path \"#{path}\""
-  end
 end
 
 RSpec::Matchers.define :be_authenticated do

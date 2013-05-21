@@ -1,8 +1,7 @@
 require "paperclip-dropbox"
 require "vcr"
 
-RSPEC_DIR = File.expand_path(File.dirname(__FILE__))
-Dir[File.join(RSPEC_DIR, "support/**/*.rb")].each &method(:require)
+Dir[File.join(Bundler.root, "spec/support/**/*.rb")].each &method(:require)
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true

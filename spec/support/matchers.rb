@@ -1,29 +1,14 @@
-RSpec::Matchers.define :be_stored_as do |path|
-  match do |attachment|
-    metadata = attachment.dropbox_client.metadata(path)
-    !metadata.nil? && !metadata['is_deleted']
-  end
-end
+require "rest-client"
 
-RSpec::Matchers.define :be_authenticated do
-  match do |attachment|
-    begin
-      attachment.dropbox_client.account_info
-      true
-    rescue
-      false
+RSpec::Matchers.define :be_an_existing_url do
+  match do |url|
+    RestClient.get(url) do |response|
+      case response.code
+      when 200 then true
+      when 404 then false
+      else
+        raise "Wrong error code: #{response.code}"
+      end
     end
-  end
-
-  failure_message_for_should do |attachment|
-    begin
-      attachment.dropbox_client.account_info
-    rescue DropboxError => exception
-      "expected #{attachment.name} to be authenticated, but exception \"#{exception}\" was raised"
-    end
-  end
-
-  failure_message_for_should_not do |attachment|
-    "expected #{attachment.name} to not be authenticated"
   end
 end

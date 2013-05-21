@@ -1,0 +1,157 @@
+---
+http_interactions:
+- request:
+    method: put
+    uri: https://api-content.dropbox.com/1/files_put/dropbox/Public/photo.jpg?overwrite=false
+    body:
+      encoding: ASCII-8BIT
+      string: !binary ""
+    headers:
+      Content-Type:
+      - application/octet-stream
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - OfficialDropboxRubySDK/1.5.1
+      Content-Length:
+      - 0
+      Authorization:
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>",
+        oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Tue, 21 May 2013 15:52:46 GMT
+      Content-Type:
+      - text/javascript
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Server-Response-Time:
+      - '262'
+      X-Dropbox-Request-Id:
+      - 4cb80131054006d8
+      Pragma:
+      - no-cache
+      Cache-Control:
+      - no-cache
+      X-Requestid:
+      - bdedda67b0b083de0a7a89ed01fdea0d
+    body:
+      encoding: US-ASCII
+      string: ! '{"revision": 8043, "rev": "1f6b01908bdc", "thumb_exists": true, "bytes":
+        0, "modified": "Tue, 21 May 2013 15:52:46 +0000", "client_mtime": "Tue, 21
+        May 2013 15:52:46 +0000", "path": "/Public/photo.jpg", "is_dir": false, "icon":
+        "page_white_picture", "root": "dropbox", "mime_type": "image/jpeg", "size":
+        "0 bytes"}'
+    http_version: 
+  recorded_at: Tue, 21 May 2013 15:52:53 GMT
+- request:
+    method: get
+    uri: https://dl.dropboxusercontent.com/u/<USER_ID>/photo.jpg
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*; q=0.5, application/xml'
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Accept-Ranges:
+      - bytes
+      Cache-Control:
+      - max-age=0
+      Content-Type:
+      - image/jpeg
+      Date:
+      - Tue, 21 May 2013 15:52:47 GMT
+      Pragma:
+      - public
+      Server:
+      - nginx
+      X-Dropbox-Request-Id:
+      - bfc207b5cc117243
+      X-Requestid:
+      - 97d2df3f29276488f9c184aac25039ed
+      X-Robots-Tag:
+      - noindex,nofollow
+      X-Server-Response-Time:
+      - '171'
+      Content-Length:
+      - '0'
+      Connection:
+      - keep-alive
+    body:
+      encoding: US-ASCII
+      string: ''
+    http_version: 
+  recorded_at: Tue, 21 May 2013 15:52:53 GMT
+- request:
+    method: post
+    uri: https://api.dropbox.com/1/fileops/delete?path=/Public/photo.jpg&root=dropbox
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - OfficialDropboxRubySDK/1.5.1
+      Authorization:
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>",
+        oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Tue, 21 May 2013 15:52:48 GMT
+      Content-Type:
+      - text/javascript
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - gvc=MTk4NTkwNDU5NzIwODI0ODkxNDc2MTg0MDA4NjAyNjkwMDAxNzI4; expires=Sun, 20
+        May 2018 15:52:47 GMT; Path=/; httponly
+      X-Server-Response-Time:
+      - '138'
+      X-Dropbox-Request-Id:
+      - cf363303af84a24e
+      Pragma:
+      - no-cache
+      Cache-Control:
+      - no-cache
+      X-Dropbox-Http-Protocol:
+      - None
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Requestid:
+      - 0c44d68d8a2cdc6a62bdbedff6607d00
+    body:
+      encoding: US-ASCII
+      string: ! '{"is_deleted": true, "revision": 8044, "rev": "1f6c01908bdc", "thumb_exists":
+        true, "bytes": 0, "modified": "Tue, 21 May 2013 15:52:47 +0000", "client_mtime":
+        "Wed, 31 Dec 1969 23:59:59 +0000", "path": "/Public/photo.jpg", "is_dir":
+        false, "icon": "page_white_picture", "root": "dropbox", "mime_type": "image/jpeg",
+        "size": "0 bytes"}'
+    http_version: 
+  recorded_at: Tue, 21 May 2013 15:52:55 GMT
+recorded_with: VCR 2.4.0

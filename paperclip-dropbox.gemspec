@@ -25,6 +25,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency "vcr", "~> 2.2"
   gem.add_development_dependency "webmock", ">= 1.8", "< 1.10"
   gem.add_development_dependency "activerecord", ">= 3.2"
-  gem.add_development_dependency "rack-test", "~> 0.6"
-  gem.add_development_dependency "sqlite3", "~> 1.3"
+  gem.add_development_dependency "activerecord-nulldb-adapter", ">= 0.2.3"
+  gem.add_development_dependency "rest-client", ">= 1.6"
 end

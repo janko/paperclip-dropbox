@@ -1,158 +1,80 @@
 require "dropbox_sdk"
-require "yaml"
-require "erb"
 require "active_support/core_ext/hash/keys"
-require "active_support/inflector/methods"
-require "active_support/core_ext/object/blank"
-require "active_support/core_ext/array/extract_options"
+require "paperclip/storage/dropbox/path_generator"
+require "paperclip/storage/dropbox/url_generator"
+require "paperclip/storage/dropbox/credentials"
 
 module Paperclip
   module Storage
     module Dropbox
       def self.extended(base)
         base.instance_eval do
-          @dropbox_credentials = parse_credentials(@options[:dropbox_credentials] || {})
-          @dropbox_options = @options[:dropbox_options] || {}
-          environment = defined?(Rails) ? Rails.env : @dropbox_options[:environment].to_s
-          @dropbox_credentials = (@dropbox_credentials[environment] || @dropbox_credentials).symbolize_keys
-          dropbox_client # Force validations of credentials
+          @options[:dropbox_options] ||= {}
+          @options[:dropbox_credentials] = fetch_credentials
+          @options[:path] = nil if @options[:path] == self.class.default_options[:path]
+          @path_generator = PathGenerator.new(self, @options)
+          @url_generator = UrlGenerator.new(self, @options)
         end
       end
 
       def flush_writes
         @queued_for_write.each do |style, file|
-          unless exists?(style)
-            dropbox_client.put_file(path(style), file.read)
-          else
-            raise FileExists, "file \"#{path(style)}\" already exists on Dropbox"
-          end
+          dropbox_client.put_file(path(style), file.read)
         end
         after_flush_writes
-        @queued_for_write = {}
+        @queued_for_write.clear
       end
 
       def flush_deletes
         @queued_for_delete.each do |path|
           dropbox_client.file_delete(path)
         end
-        @queued_for_delete = []
+        @queued_for_delete.clear
+      end
+
+      def url(style_or_options = default_style, options = {})
+        options.merge!(style_or_options) if style_or_options.is_a?(Hash)
+        style = style_or_options.is_a?(Hash) ? default_style : style_or_options
+        @url_generator.generate(style, options)
+      end
+
+      def path(style = default_style)
+        @path_generator.generate(style)
+      end
+
+      def copy_to_local_file(style = default_style, destination_path)
+        File.open(destination_path, "wb") do |file|
+          file.write(dropbox_client.get_file(path(style)))
+        end
       end
 
       def exists?(style = default_style)
-        metadata = dropbox_metadata(style)
-        !metadata.nil? && !metadata['is_deleted']
+        metadata = dropbox_client.metadata(path(style))
+        not metadata.nil? and not metadata["is_deleted"]
       rescue DropboxError
         false
       end
 
-      def url(*args)
-        if present?
-          options = args.extract_options!
-          style = args.first || default_style
-          query = options[:download] ? "?dl=1" : ""
-
-          if app_folder?
-            dropbox_client.media(path(style))["url"] + query
-          else
-            File.join("https://dl.dropboxusercontent.com/u/#{user_id}", path_for_url(style) + query)
-          end
-        else
-          @options[:default_url]
-        end
-      end
-
-      def path(style = default_style)
-        if app_folder?
-          path_for_url(style)
-        else
-          File.join("Public", path_for_url(style))
-        end
-      end
-
-      def path_for_url(style = default_style)
-        path = instance.instance_exec(style, &file_path)
-        style_suffix = (style != default_style ? "_#{style}" : "")
-
-        if original_extension.present? && path =~ /#{original_extension}$/
-          path.sub(original_extension, "#{style_suffix}#{original_extension}")
-        else
-          path + style_suffix + original_extension.to_s
-        end
-      end
-
-      def dropbox_metadata(style = default_style)
-        dropbox_client.metadata(path(style))
-      end
-
-      def copy_to_local_file(style, destination_path)
-        local_file = File.open(destination_path, "wb")
-        local_file.write(dropbox_client.get_file(path(style)))
-        local_file.close
-      end
-
       def dropbox_client
         @dropbox_client ||= begin
-          assert_required_keys
-          session = DropboxSession.new(@dropbox_credentials[:app_key], @dropbox_credentials[:app_secret])
-          session.set_access_token(@dropbox_credentials[:access_token], @dropbox_credentials[:access_token_secret])
-          DropboxClient.new(session, @dropbox_credentials[:access_type] || 'dropbox')
+          credentials = @options[:dropbox_credentials]
+          session = DropboxSession.new(credentials[:app_key], credentials[:app_secret])
+          session.set_access_token(credentials[:access_token], credentials[:access_token_secret])
+          DropboxClient.new(session, credentials[:access_type] || "dropbox")
         end
       end
+
+      def app_folder?;   @options[:dropbox_credentials][:access_type] == "app_folder"; end
+      def full_dropbox?; @options[:dropbox_credentials][:access_type] == "dropbox";    end
 
       private
 
-      def original_extension
-        File.extname(original_filename)
+      def fetch_credentials
+        environment = defined?(Rails) ? Rails.env : @options[:dropbox_options][:environment]
+        Credentials.new(@options[:dropbox_credentials]).fetch(environment)
       end
 
-      def user_id
-        @dropbox_credentials[:user_id]
-      end
-
-      def app_folder?; @dropbox_credentials[:access_type] == "app_folder" end
-      def dropbox?;    @dropbox_credentials[:access_type] == "dropbox"    end
-
-      def file_path
-        return @dropbox_options[:path] if @dropbox_options[:path]
-
-        if @dropbox_options[:unique_filename]
-          eval %(proc { |style| "\#{self.class.model_name.underscore}_\#{id}_\#{#{name}.name}" })
-        else
-          eval %(proc { |style| #{name}.original_filename })
-        end
-      end
-
-      def assert_required_keys
-        keys.each do |key|
-          value = @dropbox_credentials.fetch(key)
-          raise ":#{key} credential is nil" if value.nil?
-        end
-        if @dropbox_credentials[:access_type] and not %w[dropbox app_folder].include?(@dropbox_credentials[:access_type])
-          raise KeyError, ":access_type must be either \"dropbox\" or \"app_folder\" (was \"#{@dropbox_credentials[:access_type]}\")"
-        end
-      end
-
-      def keys
-        [:app_key, :app_secret, :access_token, :access_token_secret, :user_id]
-      end
-
-      def parse_credentials(credentials)
-        result =
-          case credentials
-          when File
-            YAML.load(ERB.new(File.read(credentials.path)).result)
-          when String, Pathname
-            YAML.load(ERB.new(File.read(credentials)).result)
-          when Hash
-            credentials
-          else
-            raise ArgumentError, ":dropbox_credentials is not a path, file, nor a hash"
-          end
-
-        result.stringify_keys
-      end
-
-      class FileExists < ArgumentError
+      class FileExists < RuntimeError
       end
     end
   end

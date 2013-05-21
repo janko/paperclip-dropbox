@@ -1,0 +1,157 @@
+---
+http_interactions:
+- request:
+    method: put
+    uri: https://api-content.dropbox.com/1/files_put/dropbox/Public/photo_with_spaces.jpg?overwrite=false
+    body:
+      encoding: ASCII-8BIT
+      string: !binary ""
+    headers:
+      Content-Type:
+      - application/octet-stream
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - OfficialDropboxRubySDK/1.5.1
+      Content-Length:
+      - 0
+      Authorization:
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>",
+        oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Tue, 21 May 2013 15:52:48 GMT
+      Content-Type:
+      - text/javascript
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Server-Response-Time:
+      - '288'
+      X-Dropbox-Request-Id:
+      - 7bb9f2e078d68342
+      Pragma:
+      - no-cache
+      Cache-Control:
+      - no-cache
+      X-Requestid:
+      - c7265b89a1a3436e3724f09519f130fd
+    body:
+      encoding: US-ASCII
+      string: ! '{"revision": 8045, "rev": "1f6d01908bdc", "thumb_exists": true, "bytes":
+        0, "modified": "Tue, 21 May 2013 15:52:48 +0000", "client_mtime": "Tue, 21
+        May 2013 15:52:48 +0000", "path": "/Public/photo_with_spaces.jpg", "is_dir":
+        false, "icon": "page_white_picture", "root": "dropbox", "mime_type": "image/jpeg",
+        "size": "0 bytes"}'
+    http_version: 
+  recorded_at: Tue, 21 May 2013 15:52:55 GMT
+- request:
+    method: get
+    uri: https://dl.dropboxusercontent.com/u/<USER_ID>/photo_with_spaces.jpg
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*; q=0.5, application/xml'
+      Accept-Encoding:
+      - gzip, deflate
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Accept-Ranges:
+      - bytes
+      Cache-Control:
+      - max-age=0
+      Content-Type:
+      - image/jpeg
+      Date:
+      - Tue, 21 May 2013 15:52:49 GMT
+      Pragma:
+      - public
+      Server:
+      - nginx
+      X-Dropbox-Request-Id:
+      - 733d98feb7424abf
+      X-Requestid:
+      - 053cdead88338e9ed030a9a6c99df776
+      X-Robots-Tag:
+      - noindex,nofollow
+      X-Server-Response-Time:
+      - '164'
+      Content-Length:
+      - '0'
+      Connection:
+      - keep-alive
+    body:
+      encoding: US-ASCII
+      string: ''
+    http_version: 
+  recorded_at: Tue, 21 May 2013 15:52:56 GMT
+- request:
+    method: post
+    uri: https://api.dropbox.com/1/fileops/delete?path=/Public/photo_with_spaces.jpg&root=dropbox
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept:
+      - ! '*/*'
+      User-Agent:
+      - OfficialDropboxRubySDK/1.5.1
+      Authorization:
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>",
+        oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Tue, 21 May 2013 15:52:50 GMT
+      Content-Type:
+      - text/javascript
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Set-Cookie:
+      - gvc=MTEyMTEzODY2NjM0NDUwOTM3MTIwMjMzNzA3NjU4MTE5NTQ5MTY%3D; expires=Sun, 20
+        May 2018 15:52:50 GMT; Path=/; httponly
+      X-Server-Response-Time:
+      - '219'
+      X-Dropbox-Request-Id:
+      - 6d6c646f29209311
+      Pragma:
+      - no-cache
+      Cache-Control:
+      - no-cache
+      X-Dropbox-Http-Protocol:
+      - None
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Requestid:
+      - 40ca6c4fce34e25efe95b067e3d77b7a
+    body:
+      encoding: US-ASCII
+      string: ! '{"is_deleted": true, "revision": 8046, "rev": "1f6e01908bdc", "thumb_exists":
+        true, "bytes": 0, "modified": "Tue, 21 May 2013 15:52:50 +0000", "client_mtime":
+        "Wed, 31 Dec 1969 23:59:59 +0000", "path": "/Public/photo_with_spaces.jpg",
+        "is_dir": false, "icon": "page_white_picture", "root": "dropbox", "mime_type":
+        "image/jpeg", "size": "0 bytes"}'
+    http_version: 
+  recorded_at: Tue, 21 May 2013 15:52:57 GMT
+recorded_with: VCR 2.4.0

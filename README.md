@@ -1,4 +1,4 @@
-# Dropbox
+# Paperclip Dropbox
 
 This gem extends [Paperclip](https://github.com/thoughtbot/paperclip) with
 [Dropbox](https://www.dropbox.com) storage.

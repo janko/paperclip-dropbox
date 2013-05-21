@@ -36,9 +36,15 @@ describe Paperclip::Storage::Dropbox::UrlGenerator do
     end
 
     it "uses :default_url when the attachment isn't assigned" do
-      @options.update(default_url: "http://default-url.com")
+      @options.update(default_url: "/missing.png")
       post = new_post(attachment: nil)
-      expect(post.attachment.url).to eq "http://default-url.com"
+      expect(post.attachment.url).to eq "/missing.png"
+    end
+
+    it "interpolates :default_url" do
+      @options.update(default_url: "/:style/missing.png")
+      post = new_post(attachment: nil)
+      expect(post.attachment.url(:thumb)).to eq "/thumb/missing.png"
     end
   end
 end

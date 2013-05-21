@@ -16,7 +16,7 @@ module Paperclip
             url.query = [url.query, "dl=1"].compact.join("&") if options[:download]
             url.to_s
           else
-            @attachment_options[:default_url]
+            @attachment_options[:interpolator].interpolate(@attachment_options[:default_url], @attachment, style)
           end
         end
 

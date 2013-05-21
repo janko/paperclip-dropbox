@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.1.5
+
+- `:default_url` is now interpolated.
+
 ## Version 1.1.4
 
 - Enable usage of Paperclip's `:path` option.

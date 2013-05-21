@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.1.4
+
+- Enable usage of Paperclip's `:path` option.
+
 ## Version 1.1.3
 
 - In Attachment#exists? made the `style` argument optional.

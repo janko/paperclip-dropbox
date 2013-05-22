@@ -124,7 +124,8 @@ user.avatar.url(:download => true)
 
 ### Check if the file exists
 
-You can easily check if the file exists on Dropbox:
+It may happen that a file on Dropbox gets deleted remotely. To check this in
+your application, you can use the `#exists?` method:
 
 ```ruby
 user.avatar.exists?

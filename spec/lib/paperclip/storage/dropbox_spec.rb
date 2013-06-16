@@ -74,6 +74,11 @@ describe Paperclip::Storage::Dropbox, :vcr do
       post = new_post
       expect(post.attachment.exists?).to be_false
     end
+
+    it "returns false if the attachment is blank" do
+      post = new_post(attachment: nil)
+      expect(post.attachment.exists?).to be_false
+    end
   end
 
   describe "#copy_to_local_file" do

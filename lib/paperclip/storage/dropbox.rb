@@ -49,6 +49,7 @@ module Paperclip
       end
 
       def exists?(style = default_style)
+        return false if not present?
         metadata = dropbox_client.metadata(path(style))
         not metadata.nil? and not metadata["is_deleted"]
       rescue DropboxError

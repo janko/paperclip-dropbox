@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.1.6
+
+- `#exists?` now returns `false` when the attachment is not present
+
 ## Version 1.1.5
 
 - `:default_url` is now interpolated.

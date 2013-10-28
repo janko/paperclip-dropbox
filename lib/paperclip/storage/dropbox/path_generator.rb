@@ -48,7 +48,7 @@ module Paperclip
           return @attachment_options[:dropbox_options][:path] if @attachment_options[:dropbox_options][:path]
 
           if @attachment_options[:dropbox_options][:unique_filename]
-            eval %(proc { |style| "\#{self.class.model_name.underscore}_\#{id}_\#{#{@attachment.name}.name}" })
+            eval %(proc { |style| "\#{ActiveModel::Naming.param_key(self.class)}_\#{id}_\#{#{@attachment.name}.name}" })
           else
             eval %(proc { |style| #{@attachment.name}.original_filename })
           end

@@ -5,14 +5,16 @@ http_interactions:
     uri: https://api-content.dropbox.com/1/files_put/sandbox/photo.jpg?overwrite=false
     body:
       encoding: ASCII-8BIT
-      string: !binary ""
+      string: ''
     headers:
       Content-Type:
       - application/octet-stream
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
-      - ! '*/*'
+      - '*/*'
       User-Agent:
-      - OfficialDropboxRubySDK/1.5.1
+      - OfficialDropboxRubySDK/1.6.2
       Content-Length:
       - 0
       Authorization:
@@ -26,7 +28,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Tue, 21 May 2013 15:33:35 GMT
+      - Mon, 28 Oct 2013 15:47:40 GMT
       Content-Type:
       - text/javascript
       Transfer-Encoding:
@@ -34,36 +36,38 @@ http_interactions:
       Connection:
       - keep-alive
       X-Server-Response-Time:
-      - '263'
+      - '251'
       X-Dropbox-Request-Id:
-      - e6c8c99776a18729
+      - 36fcf39fec129d771a74cba17433dcc6
       Pragma:
       - no-cache
       Cache-Control:
       - no-cache
       X-Requestid:
-      - 4e1b41ad91fb2215f66587c30b07c25a
+      - cd04f2d7e0f6c163a4e44b4c970e3126
     body:
-      encoding: US-ASCII
-      string: ! '{"revision": 125, "rev": "7d0c501cce", "thumb_exists": true, "bytes":
-        0, "modified": "Tue, 21 May 2013 15:33:34 +0000", "client_mtime": "Tue, 21
-        May 2013 15:33:35 +0000", "path": "/photo.jpg", "is_dir": false, "icon": "page_white_picture",
+      encoding: UTF-8
+      string: '{"revision": 148, "rev": "940c501cce", "thumb_exists": true, "bytes":
+        0, "modified": "Mon, 28 Oct 2013 15:47:39 +0000", "client_mtime": "Mon, 28
+        Oct 2013 15:47:39 +0000", "path": "/photo.jpg", "is_dir": false, "icon": "page_white_picture",
         "root": "app_folder", "mime_type": "image/jpeg", "size": "0 bytes"}'
     http_version: 
-  recorded_at: Tue, 21 May 2013 15:33:42 GMT
+  recorded_at: Mon, 28 Oct 2013 15:47:40 GMT
 - request:
     method: put
     uri: https://api-content.dropbox.com/1/files_put/sandbox/photo_thumb.jpg?overwrite=false
     body:
       encoding: ASCII-8BIT
-      string: !binary ""
+      string: ''
     headers:
       Content-Type:
       - application/octet-stream
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
-      - ! '*/*'
+      - '*/*'
       User-Agent:
-      - OfficialDropboxRubySDK/1.5.1
+      - OfficialDropboxRubySDK/1.6.2
       Content-Length:
       - 0
       Authorization:
@@ -77,7 +81,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Tue, 21 May 2013 15:33:36 GMT
+      - Mon, 28 Oct 2013 15:47:40 GMT
       Content-Type:
       - text/javascript
       Transfer-Encoding:
@@ -85,35 +89,37 @@ http_interactions:
       Connection:
       - keep-alive
       X-Server-Response-Time:
-      - '268'
+      - '273'
       X-Dropbox-Request-Id:
-      - 47c3066f07b3f0d1
+      - 82573036ea33022c067a6829e3b800e1
       Pragma:
       - no-cache
       Cache-Control:
       - no-cache
       X-Requestid:
-      - 7ea1cf729c117e0703706d2e7b3ba87d
+      - bfef1b1ddaeba4f877b5fcac5b7ecbec
     body:
-      encoding: US-ASCII
-      string: ! '{"revision": 126, "rev": "7e0c501cce", "thumb_exists": true, "bytes":
-        0, "modified": "Tue, 21 May 2013 15:33:35 +0000", "client_mtime": "Tue, 21
-        May 2013 15:33:35 +0000", "path": "/photo_thumb.jpg", "is_dir": false, "icon":
-        "page_white_picture", "root": "app_folder", "mime_type": "image/jpeg", "size":
-        "0 bytes"}'
+      encoding: UTF-8
+      string: '{"revision": 149, "rev": "950c501cce", "thumb_exists": true, "bytes":
+        0, "modified": "Mon, 28 Oct 2013 15:47:40 +0000", "client_mtime": "Mon, 28
+        Oct 2013 15:47:40 +0000", "path": "/photo_thumb (1).jpg", "is_dir": false,
+        "icon": "page_white_picture", "root": "app_folder", "mime_type": "image/jpeg",
+        "size": "0 bytes"}'
     http_version: 
-  recorded_at: Tue, 21 May 2013 15:33:42 GMT
+  recorded_at: Mon, 28 Oct 2013 15:47:41 GMT
 - request:
     method: get
-    uri: https://api.dropbox.com/1/media/sandbox/photo.jpg
+    uri: https://api.dropbox.com/1/media/sandbox/photo.jpg?
     body:
       encoding: US-ASCII
       string: ''
     headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
-      - ! '*/*'
+      - '*/*'
       User-Agent:
-      - OfficialDropboxRubySDK/1.5.1
+      - OfficialDropboxRubySDK/1.6.2
       Authorization:
       - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>",
         oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
@@ -125,7 +131,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Tue, 21 May 2013 15:33:36 GMT
+      - Mon, 28 Oct 2013 15:47:41 GMT
       Content-Type:
       - text/javascript
       Transfer-Encoding:
@@ -133,9 +139,9 @@ http_interactions:
       Connection:
       - keep-alive
       X-Server-Response-Time:
-      - '76'
+      - '64'
       X-Dropbox-Request-Id:
-      - 4b8bff8a68a95f82
+      - e2a94139ea27db6f74dc9c665c2db12f
       Pragma:
       - no-cache
       Cache-Control:
@@ -145,24 +151,26 @@ http_interactions:
       X-Frame-Options:
       - SAMEORIGIN
       X-Requestid:
-      - bbf328cfbf04ac87ab9dfcd448adc842
+      - 222f392f039e22967250e4ffda25842e
     body:
-      encoding: US-ASCII
-      string: ! '{"url": "https://dl.dropboxusercontent.com/1/view/17nvwxp1u3vq7sr/Apps/Develops/photo.jpg",
-        "expires": "Tue, 21 May 2013 19:33:36 +0000"}'
+      encoding: UTF-8
+      string: '{"url": "https://dl.dropboxusercontent.com/1/view/p59o1r7w2zl9wh1/Apps/Develops/photo.jpg",
+        "expires": "Mon, 28 Oct 2013 19:47:41 +0000"}'
     http_version: 
-  recorded_at: Tue, 21 May 2013 15:33:43 GMT
+  recorded_at: Mon, 28 Oct 2013 15:47:42 GMT
 - request:
     method: get
-    uri: https://api.dropbox.com/1/media/sandbox/photo.jpg
+    uri: https://api.dropbox.com/1/media/sandbox/photo.jpg?
     body:
       encoding: US-ASCII
       string: ''
     headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
-      - ! '*/*'
+      - '*/*'
       User-Agent:
-      - OfficialDropboxRubySDK/1.5.1
+      - OfficialDropboxRubySDK/1.6.2
       Authorization:
       - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>",
         oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
@@ -174,7 +182,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Tue, 21 May 2013 15:33:37 GMT
+      - Mon, 28 Oct 2013 15:47:42 GMT
       Content-Type:
       - text/javascript
       Transfer-Encoding:
@@ -182,9 +190,9 @@ http_interactions:
       Connection:
       - keep-alive
       X-Server-Response-Time:
-      - '93'
+      - '68'
       X-Dropbox-Request-Id:
-      - f47d16e0a9f61e81
+      - 06e3999b4dc812f1aaf73014cc894445
       Pragma:
       - no-cache
       Cache-Control:
@@ -194,22 +202,22 @@ http_interactions:
       X-Frame-Options:
       - SAMEORIGIN
       X-Requestid:
-      - 70472e35d873ab09e02e6f25efedece6
+      - 7e9e6287eee249e822328c5cf798f4d0
     body:
-      encoding: US-ASCII
-      string: ! '{"url": "https://dl.dropboxusercontent.com/1/view/17nvwxp1u3vq7sr/Apps/Develops/photo.jpg",
-        "expires": "Tue, 21 May 2013 19:33:37 +0000"}'
+      encoding: UTF-8
+      string: '{"url": "https://dl.dropboxusercontent.com/1/view/p59o1r7w2zl9wh1/Apps/Develops/photo.jpg",
+        "expires": "Mon, 28 Oct 2013 19:47:42 +0000"}'
     http_version: 
-  recorded_at: Tue, 21 May 2013 15:33:44 GMT
+  recorded_at: Mon, 28 Oct 2013 15:47:43 GMT
 - request:
     method: get
-    uri: https://dl.dropboxusercontent.com/1/view/17nvwxp1u3vq7sr/Apps/Develops/photo.jpg?dl=1
+    uri: https://dl.dropboxusercontent.com/1/view/p59o1r7w2zl9wh1/Apps/Develops/photo.jpg?dl=1
     body:
       encoding: US-ASCII
       string: ''
     headers:
       Accept:
-      - ! '*/*; q=0.5, application/xml'
+      - '*/*; q=0.5, application/xml'
       Accept-Encoding:
       - gzip, deflate
       User-Agent:
@@ -228,37 +236,43 @@ http_interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Tue, 21 May 2013 15:33:38 GMT
+      - Mon, 28 Oct 2013 15:47:43 GMT
+      Etag:
+      - 148d
       Pragma:
       - public
       Server:
       - nginx
       X-Dropbox-Request-Id:
-      - f507c7736ffd62fc
+      - 4726fee66b7758ab8371d95025b431e8
       X-Requestid:
-      - 45fd659c5b1efdbf303c173097c27c3b
+      - c1c99fbb0525fe65060964a09f88097a
       X-Server-Response-Time:
-      - '166'
+      - '139'
       Content-Length:
       - '0'
       Connection:
       - keep-alive
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ''
     http_version: 
-  recorded_at: Tue, 21 May 2013 15:33:45 GMT
+  recorded_at: Mon, 28 Oct 2013 15:47:44 GMT
 - request:
     method: post
-    uri: https://api.dropbox.com/1/fileops/delete?path=/photo.jpg&root=sandbox
+    uri: https://api.dropbox.com/1/fileops/delete
     body:
       encoding: US-ASCII
-      string: ''
+      string: root=sandbox&path=%2Fphoto.jpg
     headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
-      - ! '*/*'
+      - '*/*'
       User-Agent:
-      - OfficialDropboxRubySDK/1.5.1
+      - OfficialDropboxRubySDK/1.6.2
+      Content-Type:
+      - application/x-www-form-urlencoded
       Authorization:
       - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>",
         oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
@@ -270,7 +284,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Tue, 21 May 2013 15:33:39 GMT
+      - Mon, 28 Oct 2013 15:47:44 GMT
       Content-Type:
       - text/javascript
       Transfer-Encoding:
@@ -278,12 +292,12 @@ http_interactions:
       Connection:
       - keep-alive
       Set-Cookie:
-      - gvc=MTk5NDYxNTIwNzQ0NjMyNTU2ODg2MDI2NTIwNDg3NzY0NjIyMzA5; expires=Sun, 20
-        May 2018 15:33:39 GMT; Path=/; httponly
+      - gvc=MTkyNDA4MDY5NjYxMjA3NTg4MTcxOTU2NzA1NzU5MDM3ODM0MjQ4; expires=Sat, 27
+        Oct 2018 15:47:44 GMT; Path=/; httponly
       X-Server-Response-Time:
-      - '133'
+      - '151'
       X-Dropbox-Request-Id:
-      - f6379500dec3943f
+      - 41789f6a8d23a399ec5406d0eab5539d
       Pragma:
       - no-cache
       Cache-Control:
@@ -293,69 +307,14 @@ http_interactions:
       X-Frame-Options:
       - SAMEORIGIN
       X-Requestid:
-      - 30af2a13d720d19378b20489bce874a7
+      - 7dfb1b171c00a2a597bb660f5efbe0f8
     body:
-      encoding: US-ASCII
-      string: ! '{"is_deleted": true, "revision": 127, "rev": "7f0c501cce", "thumb_exists":
-        true, "bytes": 0, "modified": "Tue, 21 May 2013 15:33:39 +0000", "client_mtime":
+      encoding: UTF-8
+      string: '{"is_deleted": true, "revision": 150, "rev": "960c501cce", "thumb_exists":
+        true, "bytes": 0, "modified": "Mon, 28 Oct 2013 15:47:44 +0000", "client_mtime":
         "Wed, 31 Dec 1969 23:59:59 +0000", "path": "/photo.jpg", "is_dir": false,
         "icon": "page_white_picture", "root": "app_folder", "mime_type": "image/jpeg",
         "size": "0 bytes"}'
     http_version: 
-  recorded_at: Tue, 21 May 2013 15:33:46 GMT
-- request:
-    method: post
-    uri: https://api.dropbox.com/1/fileops/delete?path=/photo_thumb.jpg&root=sandbox
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      Accept:
-      - ! '*/*'
-      User-Agent:
-      - OfficialDropboxRubySDK/1.5.1
-      Authorization:
-      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>",
-        oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Server:
-      - nginx
-      Date:
-      - Tue, 21 May 2013 15:33:40 GMT
-      Content-Type:
-      - text/javascript
-      Transfer-Encoding:
-      - chunked
-      Connection:
-      - keep-alive
-      Set-Cookie:
-      - gvc=MjY0MTI0MjMzNjkwMzkzNjIxNTgzODY3MjQ5NzAyMTcwNDk3ODQ3; expires=Sun, 20
-        May 2018 15:33:40 GMT; Path=/; httponly
-      X-Server-Response-Time:
-      - '152'
-      X-Dropbox-Request-Id:
-      - 43016bb6de227b2c
-      Pragma:
-      - no-cache
-      Cache-Control:
-      - no-cache
-      X-Dropbox-Http-Protocol:
-      - None
-      X-Frame-Options:
-      - SAMEORIGIN
-      X-Requestid:
-      - 68949f199c0e10fefb5a2db64d5b5fce
-    body:
-      encoding: US-ASCII
-      string: ! '{"is_deleted": true, "revision": 128, "rev": "800c501cce", "thumb_exists":
-        true, "bytes": 0, "modified": "Tue, 21 May 2013 15:33:40 +0000", "client_mtime":
-        "Wed, 31 Dec 1969 23:59:59 +0000", "path": "/photo_thumb.jpg", "is_dir": false,
-        "icon": "page_white_picture", "root": "app_folder", "mime_type": "image/jpeg",
-        "size": "0 bytes"}'
-    http_version: 
-  recorded_at: Tue, 21 May 2013 15:33:47 GMT
-recorded_with: VCR 2.4.0
+  recorded_at: Mon, 28 Oct 2013 15:47:45 GMT
+recorded_with: VCR 2.6.0

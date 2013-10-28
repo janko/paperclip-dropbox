@@ -5,14 +5,16 @@ http_interactions:
     uri: https://api-content.dropbox.com/1/files_put/dropbox/Public/photo_with_spaces.jpg?overwrite=false
     body:
       encoding: ASCII-8BIT
-      string: !binary ""
+      string: ''
     headers:
       Content-Type:
       - application/octet-stream
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
-      - ! '*/*'
+      - '*/*'
       User-Agent:
-      - OfficialDropboxRubySDK/1.5.1
+      - OfficialDropboxRubySDK/1.6.2
       Content-Length:
       - 0
       Authorization:
@@ -26,7 +28,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Tue, 21 May 2013 15:52:48 GMT
+      - Mon, 28 Oct 2013 15:48:08 GMT
       Content-Type:
       - text/javascript
       Transfer-Encoding:
@@ -34,24 +36,24 @@ http_interactions:
       Connection:
       - keep-alive
       X-Server-Response-Time:
-      - '288'
+      - '272'
       X-Dropbox-Request-Id:
-      - 7bb9f2e078d68342
+      - 4dab8a613ee95f391a6e00ddd2eac3f6
       Pragma:
       - no-cache
       Cache-Control:
       - no-cache
       X-Requestid:
-      - c7265b89a1a3436e3724f09519f130fd
+      - bab405afbe80df023d1639cc15bb145e
     body:
-      encoding: US-ASCII
-      string: ! '{"revision": 8045, "rev": "1f6d01908bdc", "thumb_exists": true, "bytes":
-        0, "modified": "Tue, 21 May 2013 15:52:48 +0000", "client_mtime": "Tue, 21
-        May 2013 15:52:48 +0000", "path": "/Public/photo_with_spaces.jpg", "is_dir":
+      encoding: UTF-8
+      string: '{"revision": 8308, "rev": "207401908bdc", "thumb_exists": true, "bytes":
+        0, "modified": "Mon, 28 Oct 2013 15:48:08 +0000", "client_mtime": "Mon, 28
+        Oct 2013 15:48:08 +0000", "path": "/Public/photo_with_spaces.jpg", "is_dir":
         false, "icon": "page_white_picture", "root": "dropbox", "mime_type": "image/jpeg",
         "size": "0 bytes"}'
     http_version: 
-  recorded_at: Tue, 21 May 2013 15:52:55 GMT
+  recorded_at: Mon, 28 Oct 2013 15:48:09 GMT
 - request:
     method: get
     uri: https://dl.dropboxusercontent.com/u/<USER_ID>/photo_with_spaces.jpg
@@ -60,7 +62,7 @@ http_interactions:
       string: ''
     headers:
       Accept:
-      - ! '*/*; q=0.5, application/xml'
+      - '*/*; q=0.5, application/xml'
       Accept-Encoding:
       - gzip, deflate
       User-Agent:
@@ -77,39 +79,43 @@ http_interactions:
       Content-Type:
       - image/jpeg
       Date:
-      - Tue, 21 May 2013 15:52:49 GMT
+      - Mon, 28 Oct 2013 15:48:09 GMT
       Pragma:
       - public
       Server:
       - nginx
       X-Dropbox-Request-Id:
-      - 733d98feb7424abf
+      - 8f4e44cdeb0b8384de07e75799297d33
       X-Requestid:
-      - 053cdead88338e9ed030a9a6c99df776
+      - d2094b7617600b8824ea227f31a97d76
       X-Robots-Tag:
       - noindex,nofollow
       X-Server-Response-Time:
-      - '164'
+      - '143'
       Content-Length:
       - '0'
       Connection:
       - keep-alive
     body:
-      encoding: US-ASCII
+      encoding: UTF-8
       string: ''
     http_version: 
-  recorded_at: Tue, 21 May 2013 15:52:56 GMT
+  recorded_at: Mon, 28 Oct 2013 15:48:09 GMT
 - request:
     method: post
-    uri: https://api.dropbox.com/1/fileops/delete?path=/Public/photo_with_spaces.jpg&root=dropbox
+    uri: https://api.dropbox.com/1/fileops/delete
     body:
       encoding: US-ASCII
-      string: ''
+      string: root=dropbox&path=%2FPublic%2Fphoto_with_spaces.jpg
     headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
-      - ! '*/*'
+      - '*/*'
       User-Agent:
-      - OfficialDropboxRubySDK/1.5.1
+      - OfficialDropboxRubySDK/1.6.2
+      Content-Type:
+      - application/x-www-form-urlencoded
       Authorization:
       - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>",
         oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
@@ -121,7 +127,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Tue, 21 May 2013 15:52:50 GMT
+      - Mon, 28 Oct 2013 15:48:10 GMT
       Content-Type:
       - text/javascript
       Transfer-Encoding:
@@ -129,12 +135,12 @@ http_interactions:
       Connection:
       - keep-alive
       Set-Cookie:
-      - gvc=MTEyMTEzODY2NjM0NDUwOTM3MTIwMjMzNzA3NjU4MTE5NTQ5MTY%3D; expires=Sun, 20
-        May 2018 15:52:50 GMT; Path=/; httponly
+      - gvc=MTI3ODc3MzM4NjgyNjY0Mjc0ODQ0Mzg0ODUyODc2MTIzNDg5NTU2; expires=Sat, 27
+        Oct 2018 15:48:10 GMT; Path=/; httponly
       X-Server-Response-Time:
-      - '219'
+      - '140'
       X-Dropbox-Request-Id:
-      - 6d6c646f29209311
+      - e9fc06798ac04c827ba69b2c9cc93c55
       Pragma:
       - no-cache
       Cache-Control:
@@ -144,14 +150,14 @@ http_interactions:
       X-Frame-Options:
       - SAMEORIGIN
       X-Requestid:
-      - 40ca6c4fce34e25efe95b067e3d77b7a
+      - d7206d55f994fdc20afbcd90de9a8408
     body:
-      encoding: US-ASCII
-      string: ! '{"is_deleted": true, "revision": 8046, "rev": "1f6e01908bdc", "thumb_exists":
-        true, "bytes": 0, "modified": "Tue, 21 May 2013 15:52:50 +0000", "client_mtime":
+      encoding: UTF-8
+      string: '{"is_deleted": true, "revision": 8309, "rev": "207501908bdc", "thumb_exists":
+        true, "bytes": 0, "modified": "Mon, 28 Oct 2013 15:48:10 +0000", "client_mtime":
         "Wed, 31 Dec 1969 23:59:59 +0000", "path": "/Public/photo_with_spaces.jpg",
         "is_dir": false, "icon": "page_white_picture", "root": "dropbox", "mime_type":
         "image/jpeg", "size": "0 bytes"}'
     http_version: 
-  recorded_at: Tue, 21 May 2013 15:52:57 GMT
-recorded_with: VCR 2.4.0
+  recorded_at: Mon, 28 Oct 2013 15:48:11 GMT
+recorded_with: VCR 2.6.0

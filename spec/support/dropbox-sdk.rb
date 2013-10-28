@@ -1,4 +1,5 @@
 require "dropbox_sdk"
+require_relative "vcr"
 
 class DropboxSession
   attr_reader :consumer_key, :consumer_secret

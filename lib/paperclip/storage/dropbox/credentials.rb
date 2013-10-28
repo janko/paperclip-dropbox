@@ -33,6 +33,8 @@ module Paperclip
           @credentials.stringify_keys!
           @credentials = @credentials[namespace.to_s] || @credentials
           @credentials.symbolize_keys!
+
+          @credentials
         end
 
         def validate!

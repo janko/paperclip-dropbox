@@ -58,10 +58,11 @@ module Paperclip
 
       def dropbox_client
         @dropbox_client ||= begin
+          @options[:dropbox_credentials][:access_type] ||= "dropbox"
           credentials = @options[:dropbox_credentials]
           session = DropboxSession.new(credentials[:app_key], credentials[:app_secret])
           session.set_access_token(credentials[:access_token], credentials[:access_token_secret])
-          DropboxClient.new(session, credentials[:access_type] || "dropbox")
+          DropboxClient.new(session, credentials[:access_type])
         end
       end
 

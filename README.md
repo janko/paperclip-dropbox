@@ -6,7 +6,7 @@ This gem extends [Paperclip](https://github.com/thoughtbot/paperclip) with
 ## Setup
 
 ```ruby
-gem "paperclip-dropbox", ">= 1"
+gem "paperclip-dropbox", ">= 1.1.7"
 ```
 
 Example:

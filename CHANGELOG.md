@@ -1,6 +1,10 @@
 # Changelog
 
-## Version 1.1.6
+## Version 1.1.7
+
+- Fix gem not defaulting to "full dropbox" access type.
+
+## Version 1.1.6 (yanked)
 
 - `#exists?` now returns `false` when the attachment is not present
 

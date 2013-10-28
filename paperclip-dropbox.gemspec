@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |gem|
   gem.name          = "paperclip-dropbox"
-  gem.version       = "1.1.6"
+  gem.version       = "1.1.7"
 
   gem.homepage      = "https://github.com/janko-m/paperclip-dropbox"
   gem.description   = %q{Extends Paperclip with Dropbox storage.}

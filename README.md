@@ -28,12 +28,14 @@ app_secret: "..."
 access_token: "..."
 access_token_secret: "..."
 user_id: "..."
-access_type: "..."
+access_type: "dropbox|app_folder"
 ```
 
 In order to fill these in, you must [create a Dropbox app](https://www.dropbox.com/developers/apps)
 and authorize it. There are two types of Dropbox apps: **App folder** or **Full Dropbox**. You can read
 about the differences and gotchas in [this wiki](https://github.com/janko-m/paperclip-dropbox/wiki/Access-types).
+When you decide, don't forget to put `"dropbox"` or `"app_folder"` as the `:access_type`
+in your credentials.
 
 After you have created an app, you will be given the "App key" and "App secret". Provide
 these and the access type to the authorization Rake task:

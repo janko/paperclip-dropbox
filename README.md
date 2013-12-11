@@ -91,6 +91,7 @@ This is a hash containing any of the following options:
 - `:environment` – String, the environment name to use for selecting namespaced
   credentials in a non-Rails app
 
+
 For example:
 
 ```ruby
@@ -104,6 +105,20 @@ end
 
 In Rails you don't need to specify it.
 
+### The `:dropbox_visilbility` option
+This is a string  "public" (default) or "private".
+- "public" - Files will be placed in your "Public" directory in dropbox and will the public urls will be used to access the files (not http request required to get a url for the file)
+- "private" - Files can be placed in any dropbox directory (set your :path attachment option) and private, expiring urls (4 hours) will be generated each time you access this file. Private can only be used with the 'dropbox' access type.
+
+```ruby
+class User < ActiveRecord::Base
+  has_attached_file :avatar,
+    :storage => :dropbox,
+    :dropbox_credentials => Rails.root.join("config/dropbox.yml"),
+    :dropbox_visibility: 'public'
+end
+```
+
 ### The `:path` option
 
 To change the path of the file, use Paperclip's `:path` option:
@@ -112,7 +127,7 @@ To change the path of the file, use Paperclip's `:path` option:
 :path => ":style/:id_:filename"  # Defaults to ":filename"
 ```
 
-In "Full Dropbox" mode it will automatically be searched in the `Public` folder,
+In "Full Dropbox" mode with "public" visibility it will automatically be searched in the `Public` folder,
 so there is not need to specify it.
 
 ### URL options

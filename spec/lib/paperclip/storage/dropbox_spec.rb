@@ -28,6 +28,7 @@ describe Paperclip::Storage::Dropbox, :vcr do
       @options.update(dropbox_credentials: CREDENTIALS[:dropbox].except(:access_type))
       expect(new_post.attachment.dropbox_client.root).to eq "dropbox"
     end
+
   end
 
   describe "#flush_writes" do
@@ -78,6 +79,24 @@ describe Paperclip::Storage::Dropbox, :vcr do
     it "returns false if the attachment is blank" do
       post = new_post(attachment: nil)
       expect(post.attachment.exists?).to be_false
+    end
+  end
+
+  describe "path" do
+    it "adds 'Public' to path" do
+        @options.update(dropbox_visibility: "public")
+        new_post.attachment.path.include?("Public").should == true
+    end
+
+    it "does not add 'Public' to path" do
+        @options.update(dropbox_visibility: "private")
+        new_post.attachment.path.include?("Public").should == false
+    end
+
+    it "does not add 'Public' to app_folder path" do
+      @options.update(dropbox_credentials: CREDENTIALS[:dropbox].merge(:access_type => "app_folder"))
+      @options.update(dropbox_visibility: "public")
+      new_post.attachment.path.include?("Public").should == false
     end
   end
 

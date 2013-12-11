@@ -1,8 +1,9 @@
 require "dropbox_sdk"
 require "active_support/core_ext/hash/keys"
 require "paperclip/storage/dropbox/path_generator"
-require "paperclip/storage/dropbox/url_generator"
+require "paperclip/storage/dropbox/generator_factory"
 require "paperclip/storage/dropbox/credentials"
+
 
 module Paperclip
   module Storage
@@ -12,8 +13,10 @@ module Paperclip
           @options[:dropbox_options] ||= {}
           @options[:dropbox_credentials] = fetch_credentials
           @options[:path] = nil if @options[:path] == self.class.default_options[:path]
+          @options[:dropbox_visibility] ||= "public"
+
           @path_generator = PathGenerator.new(self, @options)
-          @url_generator = UrlGenerator.new(self, @options)
+          @url_generator = GeneratorFactory.build_url_generator(self, @options)
         end
       end
 
@@ -39,7 +42,9 @@ module Paperclip
       end
 
       def path(style = default_style)
-        @path_generator.generate(style)
+        path = @path_generator.generate(style)
+        path = File.join("Public", path) if public_dropbox?
+        path
       end
 
       def copy_to_local_file(style = default_style, destination_path)
@@ -66,8 +71,11 @@ module Paperclip
         end
       end
 
-      def app_folder?;   @options[:dropbox_credentials][:access_type] == "app_folder"; end
-      def full_dropbox?; @options[:dropbox_credentials][:access_type] == "dropbox";    end
+      def public_dropbox?
+        @options[:dropbox_credentials][:access_type] == "dropbox" &&
+          @options[:dropbox_visibility] == "public"
+      end
+
 
       private
 

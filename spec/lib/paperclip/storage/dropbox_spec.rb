@@ -9,8 +9,15 @@ describe Paperclip::Storage::Dropbox, :vcr do
   end
 
   def new_post(options = {})
-    Post.has_attached_file :attachment, @options
+    Post.has_attached_file :attachment,
+      {dropbox_credentials: CREDENTIALS[:dropbox]}.deep_merge(@options)
     Post.new({attachment: uploaded_file("photo.jpg")}.merge(options))
+  end
+
+  it "defaults to public dropbox storage" do
+    @options.merge!(dropbox_credentials: {access_type: nil})
+    expect(new_post.attachment.dropbox_client.root).to eq "dropbox"
+    expect(new_post.attachment.public_dropbox?).to eq true
   end
 
   describe "#dropbox_client" do

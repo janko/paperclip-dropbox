@@ -17,6 +17,8 @@ module Paperclip
 
           @path_generator = PathGenerator.new(self, @options)
           @url_generator = GeneratorFactory.build_url_generator(self, @options)
+
+          dropbox_client # Force creation of dropbox_client
         end
       end
 

@@ -6,7 +6,7 @@ module Paperclip
         def file_url(style)
           url = URI.parse("https://dl.dropboxusercontent.com/u/#{user_id}/")
           path = @attachment.path(style)
-          path = path.match(/^Public\//).post_match
+          path = path.match(/^Public\//).try(:post_match)
           url.merge!(path)
           url.to_s
         end

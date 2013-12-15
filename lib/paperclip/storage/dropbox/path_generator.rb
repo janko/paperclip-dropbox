@@ -16,7 +16,6 @@ module Paperclip
                  else
                    generate_from_proc(style)
                  end
-          path = File.join("Public", path) if @attachment.full_dropbox?
           path
         end
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 1.2.0
+
+- Add ability to provide any directory in **Full Dropbox** mode (Thanks,
+  @dougbradbury).
+
 ## Version 1.1.7
 
 - Fix gem not defaulting to "full dropbox" access type.

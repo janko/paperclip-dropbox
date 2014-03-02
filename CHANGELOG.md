@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.2.1
+
+- Allow Paperclip 4 to be used with this gem.
+
 ## Version 1.2.0
 
 - Add ability to provide any directory in **Full Dropbox** mode (Thanks,

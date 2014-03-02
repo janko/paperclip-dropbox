@@ -11,6 +11,7 @@ describe Paperclip::Storage::Dropbox, :vcr do
   def new_post(options = {})
     Post.has_attached_file :attachment,
       {dropbox_credentials: CREDENTIALS[:dropbox]}.deep_merge(@options)
+    Post.validates_attachment_content_type :attachment, :content_type => %w(image/jpeg image/jpg image/png)
     Post.new({attachment: uploaded_file("photo.jpg")}.merge(options))
   end
 

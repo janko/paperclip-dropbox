@@ -105,7 +105,7 @@ end
 
 In Rails you don't need to specify it.
 
-### The `:dropbox_visilbility` option
+### The `:dropbox_visibility` option
 This is a string  "public" (default) or "private".
 - "public" - Files will be placed in your "Public" directory in dropbox and will the public urls will be used to access the files (not http request required to get a url for the file)
 - "private" - Files can be placed in any dropbox directory (set your :path attachment option) and private, expiring urls (4 hours) will be generated each time you access this file. Private can only be used with the 'dropbox' access type.

@@ -115,7 +115,7 @@ class User < ActiveRecord::Base
   has_attached_file :avatar,
     :storage => :dropbox,
     :dropbox_credentials => Rails.root.join("config/dropbox.yml"),
-    :dropbox_visibility: 'public'
+    :dropbox_visibility => 'public'
 end
 ```
 

@@ -7,7 +7,7 @@ module Paperclip
         def self.build_url_generator(storage, options)
           if options[:dropbox_credentials][:access_type] == "app_folder" || options[:dropbox_visibility] == "private"
             PrivateUrlGenerator.new(storage, options)
-          elsif options[:dropbox_credentials][:access_type] == "dropbox"
+          elsif options[:dropbox_credentials][:access_type]
             PublicUrlGenerator.new(storage, options)
           end
         end

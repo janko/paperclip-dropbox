@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 1.2.2
+
+- Fixed `undefined method \`genreate' for nil:NilClass` when the `:access_type`
+  option is not set.
+
 ## Version 1.2.1
 
 - Allow Paperclip 4 to be used with this gem.

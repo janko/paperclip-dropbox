@@ -12,7 +12,7 @@ http_interactions:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
-      - '*/*'
+      - "*/*"
       User-Agent:
       - OfficialDropboxRubySDK/1.6.2
       Content-Length:
@@ -64,7 +64,7 @@ http_interactions:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
-      - '*/*'
+      - "*/*"
       User-Agent:
       - OfficialDropboxRubySDK/1.6.2
       Authorization:
@@ -120,7 +120,7 @@ http_interactions:
       Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       Accept:
-      - '*/*'
+      - "*/*"
       User-Agent:
       - OfficialDropboxRubySDK/1.6.2
       Content-Type:
@@ -169,4 +169,40 @@ http_interactions:
         "size": "0 bytes"}'
     http_version: 
   recorded_at: Mon, 28 Oct 2013 15:48:30 GMT
-recorded_with: VCR 2.6.0
+- request:
+    method: get
+    uri: https://api-content.dropbox.com/1/files/dropbox/Public/photo.jpg
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - OfficialDropboxRubySDK/1.6.4
+      Authorization:
+      - OAuth oauth_version="1.0", oauth_signature_method="PLAINTEXT", oauth_consumer_key="<APP_KEY>",
+        oauth_token="<ACCESS_TOKEN>", oauth_signature="<APP_SECRET>&<ACCESS_TOKEN_SECRET>"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Sat, 03 Jan 2015 14:07:55 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+    body:
+      encoding: UTF-8
+      string: '{"error": "File not found"}'
+    http_version: 
+  recorded_at: Sat, 03 Jan 2015 14:07:55 GMT
+recorded_with: VCR 2.9.3

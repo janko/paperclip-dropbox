@@ -11,14 +11,12 @@ module Paperclip
       def self.extended(base)
         base.instance_eval do
           @options[:dropbox_options] ||= {}
-          @options[:dropbox_credentials] = fetch_credentials
           @options[:path] = nil if @options[:path] == self.class.default_options[:path]
           @options[:dropbox_visibility] ||= "public"
 
           @path_generator = PathGenerator.new(self, @options)
-          @url_generator = GeneratorFactory.build_url_generator(self, @options)
 
-          dropbox_client # Force creation of dropbox_client
+          #dropbox_client # Force creation of dropbox_client
         end
       end
 
@@ -40,7 +38,7 @@ module Paperclip
       def url(style_or_options = default_style, options = {})
         options.merge!(style_or_options) if style_or_options.is_a?(Hash)
         style = style_or_options.is_a?(Hash) ? default_style : style_or_options
-        @url_generator.generate(style, options)
+        url_generator.generate(style, options)
       end
 
       def path(style = default_style)
@@ -65,25 +63,37 @@ module Paperclip
 
       def dropbox_client
         @dropbox_client ||= begin
-          @options[:dropbox_credentials][:access_type] ||= "dropbox"
-          credentials = @options[:dropbox_credentials]
+          credentials = dropbox_credentials
           session = DropboxSession.new(credentials[:app_key], credentials[:app_secret])
           session.set_access_token(credentials[:access_token], credentials[:access_token_secret])
           DropboxClient.new(session, credentials[:access_type])
         end
       end
 
-      def public_dropbox?
-        @options[:dropbox_credentials][:access_type] == "dropbox" &&
-          @options[:dropbox_visibility] == "public"
+      def dropbox_credentials
+        @dropbox_credentials ||= begin
+          creds = fetch_credentials
+          creds[:access_type] ||= 'dropbox'
+          creds
+        end
       end
 
+      def url_generator
+        @url_generator = GeneratorFactory.build_url_generator(self, @options)
+      end
+
+      def public_dropbox?
+        dropbox_credentials[:access_type] == "dropbox" &&
+          @options[:dropbox_visibility] == "public"
+      end
 
       private
 
       def fetch_credentials
+        credentials = @options[:dropbox_credentials].respond_to?('call') ? @options[:dropbox_credentials].call(self) : @options[:dropbox_credentials]
+
         environment = defined?(Rails) ? Rails.env : @options[:dropbox_options][:environment]
-        Credentials.new(@options[:dropbox_credentials]).fetch(environment)
+        Credentials.new(credentials).fetch(environment)
       end
 
       class FileExists < RuntimeError

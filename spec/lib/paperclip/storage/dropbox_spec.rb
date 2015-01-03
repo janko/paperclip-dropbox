@@ -37,6 +37,33 @@ describe Paperclip::Storage::Dropbox, :vcr do
       expect(new_post.attachment.dropbox_client.root).to eq "dropbox"
     end
 
+    it "initiatlizes a Dropbox client with proc/lambda credentials" do
+      Post.has_attached_file :attachment, {
+        dropbox_credentials: Proc.new { |post_class|
+          post_class.instance.dynamic_dropbox_credentials
+        }
+      }.deep_merge(@options)
+      Post.validates_attachment_content_type :attachment, :content_type => %w(image/jpeg image/jpg image/png)
+
+      post = Post.new({attachment: uploaded_file("photo.jpg")})
+      client = post.attachment.dropbox_client
+
+      expect(client.session.consumer_key).to eq post.object_id
+      expect(client.session.consumer_secret).to eq post.object_id
+      expect(client.session.access_token.key).to eq post.object_id
+      expect(client.session.access_token.secret).to eq post.object_id
+
+      post_2 = Post.new({attachment: uploaded_file("photo.jpg")})
+      client_2 = post_2.attachment.dropbox_client
+
+      expect(client_2.object_id).to_not eq client.object_id
+
+      expect(client_2.session.consumer_key).to eq post_2.object_id
+      expect(client_2.session.consumer_secret).to eq post_2.object_id
+      expect(client_2.session.access_token.key).to eq post_2.object_id
+      expect(client_2.session.access_token.secret).to eq post_2.object_id
+    end
+
   end
 
   describe "#flush_writes" do

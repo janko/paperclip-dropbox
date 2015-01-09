@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.3.0
+
+- `:dropbox_credentials` can now be a Proc (credits to @dukz)
+
 ## Version 1.2.2
 
 - Fixed `undefined method \`genreate' for nil:NilClass` when the `:access_type`

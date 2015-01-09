@@ -31,6 +31,9 @@ user_id: "..."
 access_type: "dropbox|app_folder"
 ```
 
+You can also pass a `Proc` to `:dropbox_credentials`, if you want the
+credentials to be dynamically evaluated.
+
 In order to fill these in, you must [create a Dropbox app](https://www.dropbox.com/developers/apps)
 and authorize it. There are two types of Dropbox apps: **App folder** or **Full Dropbox**. You can read
 about the differences and gotchas in [this wiki](https://github.com/janko-m/paperclip-dropbox/wiki/Access-types).

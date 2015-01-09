@@ -4,6 +4,17 @@ require "paperclip"
 
 class Post < ActiveRecord::Base
   include Paperclip::Glue
+
+  def dynamic_dropbox_credentials
+    {
+      app_key: self.object_id,
+      app_secret: self.object_id,
+      access_type: 'dropbox',
+      access_token: self.object_id,
+      access_token_secret: self.object_id,
+      user_id: self.object_id
+    }
+  end
 end
 
 RSpec.configure do |config|

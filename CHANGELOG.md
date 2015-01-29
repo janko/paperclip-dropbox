@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.3.1
+
+* Fix dropbox credentials not working when set with Pathname or String
+
 ## Version 1.3.0
 
 - `:dropbox_credentials` can now be a Proc (credits to @dukz)

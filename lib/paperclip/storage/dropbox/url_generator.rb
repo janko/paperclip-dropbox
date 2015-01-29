@@ -24,7 +24,7 @@ module Paperclip
         private
 
         def user_id
-          @attachment_options[:dropbox_credentials][:user_id]
+          @attachment.dropbox_credentials[:user_id]
         end
       end
 

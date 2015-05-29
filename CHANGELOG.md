@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 1.3.2
+
+* Fixed special characters in the filename (credits to @dilshod)
+
 ## Version 1.3.1
 
 * Fix dropbox credentials not working when set with Pathname or String

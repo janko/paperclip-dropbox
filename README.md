@@ -2,6 +2,9 @@
 made some significant changes to its API, which breaks this gem's core
 functionality. You shouldn't be using it anymore.**
 
+**While we're here, you also shouldn't be using Paperclip anymore, you should
+use [Shrine] instead.**
+
 ------------------------------------------------------
 
 # Paperclip Dropbox
@@ -161,3 +164,5 @@ user.avatar.exists?
 ## License
 
 [MIT License](LICENSE)
+
+[Shrine]: https://github.com/janko-m/shrine

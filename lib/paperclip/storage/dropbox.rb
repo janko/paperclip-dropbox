@@ -67,6 +67,7 @@ module Paperclip
 
       def dropbox_client
         @dropbox_client ||= begin
+          credentials = dropbox_credentials
           DropboxApi::Client.new(credentials[:access_token])
         end
       end

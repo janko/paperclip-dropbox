@@ -4,7 +4,7 @@ module Paperclip
     module Dropbox
       class PrivateUrlGenerator < UrlGenerator
         def file_url(style)
-          @attachment.dropbox_client.media(@attachment.path(style))["url"]
+          @attachment.dropbox_client.get_temporary_link(@attachment.path(style))["link"]
         end
       end
     end

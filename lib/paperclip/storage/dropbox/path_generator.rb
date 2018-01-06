@@ -1,5 +1,6 @@
 require "active_support/core_ext/object/blank"
 require "active_support/core_ext/string/strip"
+require 'uri'
 
 module Paperclip
   module Storage
@@ -16,10 +17,25 @@ module Paperclip
                  else
                    generate_from_proc(style)
                  end
-          path
+          format_path(path)
         end
 
         private
+
+        RESERVED_CHARACTERS = /[^a-zA-Z0-9\-\.\_\~\/]/
+        def format_path(path, escape=true) # :nodoc:
+          path = path.gsub(/\/+/,"/")
+          # replace multiple slashes with a single one
+
+          path = path.gsub(/^\/?/,"/")
+          # ensure the path starts with a slash
+
+          path.gsub(/\/?$/,"")
+          # ensure the path doesn't end with a slash
+
+          return URI.escape(path, RESERVED_CHARACTERS) if escape
+          path
+        end
 
         def normal_path_style?
           @attachment_options[:path].present?

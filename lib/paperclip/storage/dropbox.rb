@@ -61,7 +61,7 @@ module Paperclip
         return false if not present?
         metadata = dropbox_client.get_metadata(path(style))
         not metadata.nil?
-      rescue DropboxApi::Errors
+      rescue DropboxApi::Errors::NotFoundError
         false
       end
 

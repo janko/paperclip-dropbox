@@ -18,7 +18,6 @@ Gem::Specification.new do |gem|
   gem.license       = "MIT"
 
   gem.add_dependency "paperclip", ">= 3.1", "< 5"
-  gem.add_dependency "dropbox-sdk", "~> 1.3"
   gem.add_dependency "dropbox_api", "~> 0.1.10"
 
   gem.add_development_dependency "rake"

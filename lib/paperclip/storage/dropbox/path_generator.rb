@@ -21,7 +21,6 @@ module Paperclip
 
         private
 
-        RESERVED_CHARACTERS = /[^a-zA-Z0-9\-\.\_\~\/]/
         def format_path(path) # :nodoc:
           path = path.gsub(/\/+/,"/")
           # replace multiple slashes with a single one

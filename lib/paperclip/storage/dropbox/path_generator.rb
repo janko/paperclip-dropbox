@@ -16,10 +16,23 @@ module Paperclip
                  else
                    generate_from_proc(style)
                  end
-          path
+          format_path(path)
         end
 
         private
+
+        def format_path(path) # :nodoc:
+          path = path.gsub(/\/+/,"/")
+          # replace multiple slashes with a single one
+
+          path = path.gsub(/^\/?/,"/")
+          # ensure the path starts with a slash
+
+          path.gsub(/\/?$/,"")
+          # ensure the path doesn't end with a slash
+
+          path
+        end
 
         def normal_path_style?
           @attachment_options[:path].present?

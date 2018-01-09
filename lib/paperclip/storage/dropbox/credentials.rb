@@ -59,8 +59,7 @@ module Paperclip
 
         REQUIRED_KEYS = [
           :app_key, :app_secret,
-          :access_token, :access_token_secret,
-          :user_id
+          :access_token
         ]
       end
     end

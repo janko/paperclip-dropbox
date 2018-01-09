@@ -1,4 +1,3 @@
-require "dropbox_sdk"
 require_relative "vcr"
 
 class DropboxSession
@@ -25,12 +24,3 @@ class DropboxClient
   end
 end
 
-# Delete all uploaded files if there were any
-RSpec.configure do |config|
-  config.after do
-    DropboxClient.uploaded_files.each do |path, dropbox_client|
-      dropbox_client.file_delete(path)
-    end
-    DropboxClient.uploaded_files.clear
-  end
-end

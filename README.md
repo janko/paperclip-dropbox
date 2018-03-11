@@ -165,4 +165,4 @@ user.avatar.exists?
 
 [MIT License](LICENSE)
 
-[Shrine]: https://github.com/janko-m/shrine
+[Shrine]: https://github.com/shrinerb/shrine
